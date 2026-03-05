@@ -19,17 +19,21 @@ If `$ARGUMENTS` is provided, use it as the scope:
 
 If no arguments, ask the user what to review.
 
-### 2. Discover reviewers
+### 2. Discover and select reviewers
 
 Scan `agents/reviewers/` for all reviewer agent definitions. Each `.md` file in that directory is a reviewer to run.
 
 If the directory is empty or doesn't exist, inform the user and stop.
 
+**Selecting reviewers**: By default, run only the **core reviewers**: `security`, `code-quality`, and `simplicity`. If the user specifies additional reviewers (or `all`), run those too. This keeps the default cost low while still catching the most important issues. Present the list of selected reviewers to the user before launching them.
+
 ### 3. Run reviewers in parallel
 
 Launch all discovered reviewers as parallel sub-agents using `Task`. Each reviewer receives:
 - The list of files to review
-- The diff or file contents as appropriate
+- **The diff only** — never send full file contents. Use `git diff` output so reviewers focus on what changed. Include enough surrounding context lines (`git diff -U8`) for reviewers to understand the change, but no more.
+
+If a reviewer genuinely needs broader file context (e.g., to check an import at the top of a file), it can read the file itself — don't pre-load it.
 
 ### 4. Synthesize and present findings
 

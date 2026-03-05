@@ -53,6 +53,11 @@ For each phase, create a plan file in `.ai-workflow/plans/` using the file forma
 - **Bad**: "Add authentication"
 - **Good**: "Add session-based authentication using Phoenix.Token. Create a login LiveView at /login that accepts email/password, validates against the users table, and sets a signed session cookie."
 
+When referencing files to modify, **include line ranges** so the implementing agent can do targeted reads instead of loading entire files. For example:
+
+- **Bad**: "Update `src/commands/update.js` to add the new handler"
+- **Good**: "Update `src/commands/update.js` lines 45-80 (the `runUpdate` function) to add the new handler after the existing validation block"
+
 Push for specificity. Ask the user clarifying questions rather than leaving things vague. A good plan should leave minimal ambiguity for the implementation phase.
 
 ### 5. Review with the user
