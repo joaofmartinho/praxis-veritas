@@ -18,11 +18,10 @@ function makeTemplates(entries) {
 
 describe("getComponentForFile", () => {
   it("returns null for core skill files", () => {
-    expect(getComponentForFile("praxis/skills/px-brainstorm/SKILL.md")).toBeNull();
-    expect(getComponentForFile("praxis/skills/px-plan/SKILL.md")).toBeNull();
+    expect(getComponentForFile("praxis/skills/px-shape/SKILL.md")).toBeNull();
     expect(getComponentForFile("praxis/skills/px-implement/SKILL.md")).toBeNull();
     expect(getComponentForFile("praxis/skills/px-review/SKILL.md")).toBeNull();
-    expect(getComponentForFile("praxis/skills/px-retrospect/SKILL.md")).toBeNull();
+    expect(getComponentForFile("praxis/skills/px-transmute/SKILL.md")).toBeNull();
   });
 
   it("returns skill component for optional skill files", () => {
@@ -79,7 +78,7 @@ describe("getCoreFiles", () => {
       ["praxis/conventions.md", "conventions"],
       ["praxis/reviewer-output-format.md", "format"],
       ["praxis/agents/codebase-explorer.md", "explorer"],
-      ["praxis/skills/px-brainstorm/SKILL.md", "brainstorm"],
+      ["praxis/skills/px-shape/SKILL.md", "shape"],
       ["praxis/skills/agent-browser/SKILL.md", "browser"],
       ["praxis/agents/reviewers/security.md", "security"],
     ]);
@@ -89,7 +88,7 @@ describe("getCoreFiles", () => {
     expect(core.has("praxis/conventions.md")).toBe(true);
     expect(core.has("praxis/reviewer-output-format.md")).toBe(true);
     expect(core.has("praxis/agents/codebase-explorer.md")).toBe(true);
-    expect(core.has("praxis/skills/px-brainstorm/SKILL.md")).toBe(true);
+    expect(core.has("praxis/skills/px-shape/SKILL.md")).toBe(true);
     expect(core.has("praxis/skills/agent-browser/SKILL.md")).toBe(false);
     expect(core.has("praxis/agents/reviewers/security.md")).toBe(false);
   });
@@ -97,7 +96,7 @@ describe("getCoreFiles", () => {
   it("returns all templates when none are optional", () => {
     const templates = makeTemplates([
       ["praxis/conventions.md", "conventions"],
-      ["praxis/skills/px-brainstorm/SKILL.md", "brainstorm"],
+      ["praxis/skills/px-shape/SKILL.md", "shape"],
     ]);
     expect(getCoreFiles(templates).size).toBe(2);
   });
@@ -147,7 +146,7 @@ describe("discoverOptionalComponents", () => {
   it("finds all optional components from a templates map", () => {
     const templates = makeTemplates([
       ["praxis/conventions.md", "core"],
-      ["praxis/skills/px-brainstorm/SKILL.md", "---\ndescription: Brainstorm\n---"],
+      ["praxis/skills/px-shape/SKILL.md", "---\ndescription: Shape\n---"],
       ["praxis/skills/agent-browser/SKILL.md", '---\ndescription: "Browser automation"\n---'],
       ["praxis/skills/agent-browser/references/commands.md", "commands"],
       ["praxis/skills/figma-to-code/SKILL.md", "---\ndescription: Figma\n---"],
@@ -158,9 +157,9 @@ describe("discoverOptionalComponents", () => {
     const components = discoverOptionalComponents(templates);
 
     // Only optional: agent-browser, figma-to-code (skills), security, code-quality (reviewers)
-    // px-brainstorm is a core skill, should not appear
+    // px-shape is a core skill, should not appear
     const names = components.map((c) => c.name);
-    expect(names).not.toContain("px-brainstorm");
+    expect(names).not.toContain("px-shape");
     expect(names).toContain("agent-browser");
     expect(names).toContain("figma-to-code");
     expect(names).toContain("security");
@@ -193,7 +192,7 @@ describe("discoverOptionalComponents", () => {
   it("returns empty array when no optional components exist", () => {
     const templates = makeTemplates([
       ["praxis/conventions.md", "core"],
-      ["praxis/skills/px-brainstorm/SKILL.md", "core skill"],
+      ["praxis/skills/px-shape/SKILL.md", "core skill"],
     ]);
     expect(discoverOptionalComponents(templates)).toEqual([]);
   });
@@ -257,13 +256,13 @@ describe("getSelectedComponents", () => {
     const templates = makeTemplates([
       ["praxis/skills/agent-browser/SKILL.md", "---\ndescription: Browser\n---"],
       ["praxis/agents/reviewers/security.md", "---\ndescription: Security\n---"],
-      ["praxis/skills/px-brainstorm/SKILL.md", "core"],
+      ["praxis/skills/px-shape/SKILL.md", "core"],
       ["praxis/conventions.md", "core"],
     ]);
 
     const result = getSelectedComponents(manifest, templates);
     expect(result.skills).toContain("agent-browser");
-    expect(result.skills).not.toContain("px-brainstorm");
+    expect(result.skills).not.toContain("px-shape");
     expect(result.reviewers).toContain("security");
   });
 });

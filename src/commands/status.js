@@ -8,12 +8,12 @@ import { getAdapter } from "../adapters.js";
 export async function status() {
   const projectRoot = process.cwd();
 
-  p.intro(pc.bold("Praxis — Status"));
+  p.intro(pc.bold("Praxis Veritas — Status"));
 
   const manifest = await readManifest(projectRoot);
   if (!manifest) {
-    p.log.warn("Praxis is not installed in this project.");
-    p.outro('Run "praxis init" to get started.');
+    p.log.warn("Praxis Veritas is not installed in this project.");
+    p.outro('Run "praxis-veritas init" to get started.');
     return;
   }
 
@@ -122,7 +122,7 @@ export async function status() {
   if (selection) {
     const selectedCount = selection.skills.length + selection.reviewers.length;
     p.log.info(
-      `Components: ${selectedCount} optional component(s) selected. Run ${pc.dim("praxis components")} to change.`
+      `Components: ${selectedCount} optional component(s) selected. Run ${pc.dim("praxis-veritas components")} to change.`
     );
   }
 

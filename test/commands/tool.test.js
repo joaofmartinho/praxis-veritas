@@ -113,7 +113,7 @@ describe("toolAdd", () => {
 
     // Manifest should be updated
     const manifest = JSON.parse(
-      await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8")
+      await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8")
     );
     expect(manifest.enabledTools).toContain("claude-code");
   });
@@ -198,7 +198,7 @@ describe("toolAdd", () => {
     await toolAdd(["amp-code"]);
 
     const manifest = JSON.parse(
-      await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8")
+      await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8")
     );
     expect(manifest.enabledTools).toContain("amp-code");
 
@@ -241,7 +241,7 @@ describe("toolAdd", () => {
     expect(existsSync(join(tmpDir, "opencode.json"))).toBe(true);
 
     const manifest = JSON.parse(
-      await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8")
+      await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8")
     );
     expect(manifest.enabledTools).toContain("cursor");
     expect(manifest.enabledTools).toContain("opencode");
@@ -344,7 +344,7 @@ describe("toolAdd", () => {
     expect(installed).toBe(fileContent);
 
     const manifest = JSON.parse(
-      await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8")
+      await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8")
     );
     const entry = manifest.files["praxis/skills/my-skill/SKILL.md"];
     expect(entry.destinations["claude-code"]).toBe(
@@ -441,7 +441,7 @@ describe("toolRemove", () => {
     expect(existsSync(join(tmpDir, ".cursor"))).toBe(false);
 
     const manifest = JSON.parse(
-      await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8")
+      await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8")
     );
     expect(manifest.enabledTools).not.toContain("cursor");
   });
@@ -501,7 +501,7 @@ describe("toolRemove", () => {
     await toolRemove(["cursor"]);
 
     const manifest = JSON.parse(
-      await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8")
+      await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8")
     );
     expect(manifest.enabledTools).not.toContain("cursor");
   });
@@ -526,7 +526,7 @@ describe("toolRemove", () => {
     await toolRemove(["amp-code"]);
 
     const manifest = JSON.parse(
-      await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8")
+      await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8")
     );
     expect(manifest.enabledTools).not.toContain("amp-code");
   });
@@ -610,7 +610,7 @@ describe("toolRemove", () => {
     expect(existsSync(join(tmpDir, ".cursor/conventions.md"))).toBe(true);
 
     const manifest = JSON.parse(
-      await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8")
+      await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8")
     );
     // amp-code destination should be gone, cursor should remain
     expect(manifest.files["praxis/conventions.md"].destinations["amp-code"]).toBeUndefined();
@@ -636,7 +636,7 @@ describe("toolRemove", () => {
     await toolRemove(["amp-code"]);
 
     const manifest = JSON.parse(
-      await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8")
+      await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8")
     );
     expect(manifest.enabledTools).not.toContain("amp-code");
     expect(manifest.files["praxis/conventions.md"].destinations["amp-code"]).toBeUndefined();
@@ -713,7 +713,7 @@ describe("toolRemove", () => {
     await toolRemove(["amp-code"]);
 
     const manifest = JSON.parse(
-      await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8")
+      await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8")
     );
     expect(manifest.enabledTools).not.toContain("amp-code");
   });

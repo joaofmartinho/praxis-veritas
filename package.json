@@ -1,10 +1,11 @@
 {
-  "name": "@dfilipes/praxis",
+  "name": "@joaofmartinho/praxis-veritas",
   "version": "0.1.0",
-  "description": "AI-assisted development workflow — portable agent skills and sub-agents",
+  "description": "Portable AI-assisted development workflow that compounds repository knowledge into Veritas",
   "type": "module",
   "bin": {
-    "praxis": "./bin/cli.js"
+    "praxis": "./bin/cli.js",
+    "praxis-veritas": "./bin/cli.js"
   },
   "files": [
     "bin/",

@@ -20,12 +20,12 @@ export async function components({ ref = "main" } = {}) {
   const projectRoot = process.cwd();
   const resolvedRoot = resolve(projectRoot);
 
-  p.intro(pc.bold("Praxis — Components"));
+  p.intro(pc.bold("Praxis Veritas — Components"));
 
   const manifest = await readManifest(projectRoot);
   if (!manifest) {
     p.log.error(
-      'Praxis is not initialized in this project. Run "praxis init" first.'
+      'Praxis Veritas is not initialized in this project. Run "praxis-veritas init" first.'
     );
     process.exit(1);
   }

@@ -5,14 +5,14 @@ import { Readable } from "node:stream";
 import { extract } from "tar";
 
 const TARBALL_BASE_URL =
-  "https://api.github.com/repos/DFilipeS/praxis/tarball";
+  "https://api.github.com/repos/joaofmartinho/praxis-veritas/tarball";
 
 const MAX_DOWNLOAD_SIZE = 10 * 1024 * 1024; // 10 MB
 
 export async function fetchTemplates({ ref = "main" } = {}) {
   const url = `${TARBALL_BASE_URL}/${encodeURIComponent(ref)}`;
   const res = await fetch(url, {
-    headers: { "User-Agent": "praxis-cli" },
+    headers: { "User-Agent": "praxis-veritas-cli" },
     redirect: "follow",
   });
 
@@ -36,7 +36,7 @@ export async function fetchTemplates({ ref = "main" } = {}) {
     );
   }
 
-  const tmpDir = await mkdtemp(join(tmpdir(), "praxis-"));
+  const tmpDir = await mkdtemp(join(tmpdir(), "praxis-veritas-"));
 
   try {
     const stream = Readable.from(buffer);
@@ -46,7 +46,12 @@ export async function fetchTemplates({ ref = "main" } = {}) {
       filter: (path) => {
         const parts = path.split("/").slice(1);
         const relative = parts.join("/");
-        return relative.startsWith("praxis/") || relative === "praxis";
+        return (
+          relative.startsWith("praxis/") ||
+          relative === "praxis" ||
+          relative.startsWith(".ai-workflow/") ||
+          relative === ".ai-workflow"
+        );
       },
     });
 
@@ -58,11 +63,23 @@ export async function fetchTemplates({ ref = "main" } = {}) {
     });
 
     const files = new Map();
-    await collectFiles(join(tmpDir, "praxis"), "praxis", files);
+    await collectFilesIfExists(join(tmpDir, "praxis"), "praxis", files);
+    await collectFilesIfExists(join(tmpDir, ".ai-workflow"), ".ai-workflow", files);
     return files;
   } finally {
     await rm(tmpDir, { recursive: true, force: true });
   }
+}
+
+async function collectFilesIfExists(dir, prefix, files) {
+  try {
+    await stat(dir);
+  } catch (err) {
+    if (err.code === "ENOENT") return;
+    throw err;
+  }
+
+  await collectFiles(dir, prefix, files);
 }
 
 async function collectFiles(dir, prefix, files) {

@@ -1,36 +1,39 @@
-# Praxis
+# Praxis Veritas
 
 ![Praxis](assets/hero.png)
 
-_From Greek: the process of putting ideas into practice._
+_From Greek, praxis: the work of putting ideas into practice. From Latin, veritas: the durable knowledge that remains._
 
-A complete AI-assisted development workflow, packaged as portable agent skills and sub-agents. Praxis implements a structured development cycle — from idea to production code to documented learnings — designed to make each cycle of work improve the next. The name reflects what this workflow is about: not just thinking or just doing, but the disciplined cycle of idea → practice → reflection that makes each iteration better than the last.
+A portable AI-assisted development workflow. Shape, execute, review, and transmute — each cycle turns work into durable repository knowledge and a compact repository history.
 
-This workflow mirrors how I personally develop software — brainstorm until the idea is clear, plan concretely before touching code, implement with discipline, review rigorously, and always look back to learn. Praxis encodes that process so AI agents can follow it consistently.
+Praxis Veritas is built around knowledge compaction. Temporary workflow artifacts may still help agents think and execute, but they are not the final goal and they are not meant to become the repository's long-term memory. The goal is to end each cycle with `Veritas`: a canonical, curated, topic-oriented knowledge layer that future agents can trust first, plus a compact historical run record stored separately inside the repo.
 
 Inspired by [Every's Compound Engineering guide](https://every.to/guides/compound-engineering) and its core principle: **every unit of engineering work should make subsequent units easier, not harder.**
 
-### Why Praxis?
+### Why Praxis Veritas?
 
-**Project and technology agnostic.** Praxis is not tied to any language, framework, or tech stack. It works with any codebase — drop it into an Elixir project, a React app, a Rust CLI, or a Rails monolith. The skills describe _how to work_, not _what to work on_.
+**Project and technology agnostic.** Praxis Veritas is not tied to any language, framework, or tech stack. It works with any codebase — drop it into an Elixir project, a React app, a Rust CLI, or a Rails monolith. The skills describe _how to work_, not _what to work on_.
 
-**Context window efficient.** Every design decision respects the limited context window of AI agents. Templates are loaded on demand through progressive disclosure, not upfront. Research runs in parallel sub-agents that return summaries instead of polluting the main thread. Shared conventions live in one file, referenced by many. The goal: spend tokens on the real work, not on infrastructure.
+**Knowledge compounding.** Workflow artifacts are temporary. `Transmute` merges durable conclusions into `Veritas`, and when a learning should become an always-on instruction, it also updates the adopted project's agent rules so future sessions follow it by default.
+
+**Separate history without canonical drift.** Active non-canonical run documents and completed run records live in a dedicated in-repo vault. That preserves team memory without making the repository's canonical knowledge depend on temporary workflow artifacts.
+
+**Context window efficient.** Every design decision respects the limited context window of AI agents. Shared conventions live in one file, referenced by many. The goal: spend tokens on the real work, not on infrastructure.
 
 **Tool agnostic.** No dependency on a specific AI coding tool. Skills and agents use standard markdown with YAML frontmatter, compatible with [Amp](https://ampcode.com), [Claude Code](https://code.claude.com), [Cursor](https://cursor.com), [OpenCode](https://opencode.ai), and similar tools.
 
 ## The Cycle
 
 ```
-px-brainstorm → px-plan → px-implement → px-review → px-retrospect
-       ↑                                                   │
-       └────────────────── learnings feed back ────────────┘
+px-shape → px-implement → px-review → px-transmute
+                        │                    │
+                        └──── findings ─────┴──→ Veritas
 ```
 
-1. **px-brainstorm** — Explore ideas through conversation. No code, no technical details. Output: idea files.
-2. **px-plan** — Turn an idea into concrete, actionable implementation plans. Parallel sub-agents research the codebase, past learnings, and external best practices. Output: plan files.
-3. **px-implement** — Execute a plan step by step, committing meaningful units of work. Output: code on a feature branch.
-4. **px-review** — Run configurable reviewer agents in parallel against the changed code. Findings are presented, not auto-fixed. Output: prioritized review findings.
-5. **px-retrospect** — Analyze completed work, capture specific learnings. Output: learning files that feed back into future brainstorming and planning sessions.
+1. **px-shape** — Clarify the problem, research the codebase and domain, and write a non-canonical shape document such as `.ai-workflow/vault/20260419-user-onboarding-shape.md`.
+2. **px-implement** — Execute the shaped work step by step using that vault shape document as the implementation brief.
+3. **px-review** — Run configurable reviewer agents in parallel against the changed code. Findings are presented, not auto-fixed.
+4. **px-transmute** — Convert durable outcomes from shaping, implementation, and review into `Veritas`, update project agent rules when the learning should change future default behavior, then write the run history into `.ai-workflow/vault/`. Temporary artifacts become non-canonical after transmutation.
 
 ## Components
 
@@ -40,13 +43,12 @@ Core skills implement the full development cycle and are always installed.
 
 | Skill           | Description                                                                          |
 | --------------- | ------------------------------------------------------------------------------------ |
-| `px-brainstorm` | Explore ideas through open-ended conversation before any planning or implementation  |
-| `px-plan`       | Turn a brainstormed idea into a concrete, phased implementation plan                 |
-| `px-implement`  | Execute a plan step by step, committing meaningful units of work                     |
+| `px-shape`      | Clarify the work and write the implementation brief into the vault                   |
+| `px-implement`  | Execute the shape document step by step, committing meaningful units of work         |
 | `px-review`     | Run configurable reviewer agents in parallel; findings are presented, not auto-fixed |
-| `px-retrospect` | Capture specific learnings from completed work to improve future cycles              |
+| `px-transmute`  | Update `Veritas` and write the mandatory historical run record                       |
 
-Optional skills are project-specific. Select them during `praxis init` or change your selection anytime with `praxis components`.
+Optional skills are project-specific. Select them during `praxis-veritas init` or change your selection anytime with `praxis-veritas components`.
 
 | Skill           | Description                                                                              |
 | --------------- | ---------------------------------------------------------------------------------------- |
@@ -82,22 +84,24 @@ All reviewers are optional. They run in parallel during the px-review skill. Add
 
 ### Installation
 
-The recommended way to install Praxis is via the CLI (requires Node.js 18+):
+The recommended way to install Praxis Veritas is via the CLI (requires Node.js 18+):
 
 ```bash
-npx github:DFilipeS/praxis init
+npx github:joaofmartinho/praxis-veritas init
 ```
 
 The `init` command walks you through an interactive setup:
 1. **Tool selection** — choose which AI coding tools you use (Amp Code, Claude Code, Cursor, OpenCode). Praxis installs files directly into each tool's expected directory (`.agents/`, `.claude/`, `.cursor/`, `.opencode/`).
 2. **Component selection** — choose which optional skills and reviewers to install.
 
-It then copies all files, sets up `.ai-workflow/` directories, generates MCP configs for selected tools, and writes a `.praxis-manifest.json` file to track installed files. Commit `.praxis-manifest.json` to version control so the CLI can detect changes on future updates.
+If the current project already has an older Praxis installation tracked by `.praxis-manifest.json`, `init` detects it and offers to migrate it to Praxis Veritas instead of starting from scratch.
+
+It then copies all files, installs the `.ai-workflow/` starter files, generates MCP configs for selected tools, and writes a `.praxis-veritas-manifest.json` file to track installed files. Commit `.praxis-veritas-manifest.json` to version control so the CLI can detect changes on future updates.
 
 To update to the latest version:
 
 ```bash
-npx github:DFilipeS/praxis update
+npx github:joaofmartinho/praxis-veritas update
 ```
 
 The update command fetches the latest files from the Praxis repo's main branch, applies changes, and prompts you before overwriting any files you've locally modified.
@@ -105,7 +109,7 @@ The update command fetches the latest files from the Praxis repo's main branch, 
 To change which optional components (skills and reviewers) are installed:
 
 ```bash
-npx github:DFilipeS/praxis components
+npx github:joaofmartinho/praxis-veritas components
 ```
 
 This opens an interactive multi-select where you can toggle optional skills (like `agent-browser`, `figma-to-code`, `mobile-mcp`) and reviewers. Core skills are always installed and cannot be removed. MCP configs are automatically regenerated for all enabled tools to reflect the new selection.
@@ -113,22 +117,23 @@ This opens an interactive multi-select where you can toggle optional skills (lik
 To check the status of managed files:
 
 ```bash
-npx github:DFilipeS/praxis status
+npx github:joaofmartinho/praxis-veritas status
 ```
 
 All commands that fetch from GitHub support a `--ref` flag to target a specific branch, tag, or commit SHA instead of `main`:
 
 ```bash
-npx github:DFilipeS/praxis init --ref my-feature-branch
-npx github:DFilipeS/praxis update --ref v2.0.0
+npx github:joaofmartinho/praxis-veritas init --ref my-feature-branch
+npx github:joaofmartinho/praxis-veritas update --ref v2.0.0
 ```
 
 #### Manual installation
 
-If you don't use Node.js, copy the contents of the `praxis/` directory from this repo into your tool's config directory (e.g., `.agents/` for Amp Code, `.claude/` for Claude Code, `.cursor/` for Cursor):
+If you don't use Node.js, copy the contents of the `praxis/` directory from this repo into your tool's config directory (e.g., `.agents/` for Amp Code, `.claude/` for Claude Code, `.cursor/` for Cursor), and copy the `.ai-workflow/` starter files into the target project:
 
 ```bash
 cp -r path/to/praxis/praxis/* your-project/.agents/
+cp -r path/to/praxis/.ai-workflow your-project/.ai-workflow
 ```
 
 Note that manual copies won't receive automatic updates or multi-tool support.
@@ -138,62 +143,35 @@ Note that manual copies won't receive automatic updates or multi-tool support.
 Invoke skills by name through your AI agent:
 
 ```
-/skill px-brainstorm a better way to handle user onboarding
-/skill px-plan .ai-workflow/ideas/20260222-user-onboarding.md
-/skill px-implement .ai-workflow/plans/20260222-user-onboarding-phase-1.md
+/skill px-shape a better way to handle user onboarding
+/skill px-implement .ai-workflow/vault/20260419-user-onboarding-shape.md
 /skill px-review staged
-/skill px-retrospect .ai-workflow/plans/20260222-user-onboarding-phase-1.md
+/skill px-transmute current run
 ```
 
 ## Project Structure
 
 ```
 praxis/
-├── conventions.md                        # Shared conventions (directories, naming, tags, statuses)
+├── conventions.md                        # Shared conventions and authority rules
 ├── reviewer-output-format.md             # Shared output format for all reviewers
 ├── agents/
-│   ├── codebase-explorer.md              # Explores the repo for relevant code
-│   ├── knowledge-reviewer.md             # Searches past learnings
-│   ├── external-researcher.md            # Searches the web for best practices
-│   └── reviewers/                        # Add/remove reviewers to customize
-│       ├── agent-accessibility.md
-│       ├── architecture.md
-│       ├── code-quality.md
-│       ├── data-integrity.md
-│       ├── pattern-recognition.md
-│       ├── performance.md
-│       ├── security.md                   # Includes OWASP Top 10:2025
-│       └── simplicity.md
+│   ├── codebase-explorer.md
+│   ├── knowledge-reviewer.md
+│   ├── external-researcher.md
+│   └── reviewers/
 └── skills/
-    ├── px-brainstorm/
-    │   ├── SKILL.md
-    │   └── reference/template.md         # Idea file template
-    ├── px-plan/
-    │   ├── SKILL.md
-    │   └── reference/template.md         # Plan file template
+    ├── px-shape/
     ├── px-implement/
-    │   └── SKILL.md
-    ├── agent-browser/
-    │   ├── SKILL.md
-    │   ├── references/                   # Deep-dive docs (commands, sessions, auth, etc.)
-    │   └── templates/                    # Ready-to-use shell scripts
-    ├── mobile-mcp/
-    │   ├── SKILL.md
-    │   └── mcp.json                      # Bundles @mobilenext/mobile-mcp
-    ├── figma-to-code/
-    │   ├── SKILL.md
-    │   └── mcp.json                      # Bundles figma-developer-mcp
     ├── px-review/
-    │   └── SKILL.md
-    └── px-retrospect/
-        ├── SKILL.md
-        └── reference/template.md         # Learning file template
+    ├── px-transmute/
+    └── ...
 
-.ai-workflow/                             # Created automatically during use
+.ai-workflow/
 ├── tags                                  # Shared tag registry
-├── ideas/                                # Brainstormed ideas
-├── plans/                                # Implementation plans
-└── learnings/                            # Documented insights from retrospectives
+├── veritas/                              # Canonical knowledge
+├── vault/                                # Non-canonical run documents, records, and archived workflow artifacts
+├── local/                                # Optional gitignored scratch space
 ```
 
 ## Customization
@@ -210,7 +188,7 @@ Delete any reviewer file you don't need. For example, remove `data-integrity.md`
 
 ### Tags
 
-All documents (ideas, plans, learnings) share a single tag registry at `.ai-workflow/tags`. Tags are maintained automatically — the skills read existing tags before assigning new ones to keep vocabulary consistent.
+All tracked artifacts share a single tag registry at `.ai-workflow/tags`. Tags are maintained automatically — the skills read existing tags before assigning new ones to keep vocabulary consistent.
 
 ### Environment variables
 
@@ -222,20 +200,20 @@ Some skills require environment variables to connect to external services:
 
 ### Tool Adapters
 
-Tools are selected during `praxis init`. You can also add or remove tools later:
+Tools are selected during `praxis-veritas init`. You can also add or remove tools later:
 
 ```bash
 # Add tools (installs files + generates MCP config)
-npx github:DFilipeS/praxis tool add claude-code cursor
+npx github:joaofmartinho/praxis-veritas tool add claude-code cursor
 
-# Remove a tool (deletes its Praxis-managed files and config)
-npx github:DFilipeS/praxis tool remove cursor
+# Remove a tool (deletes its Praxis Veritas-managed files and config)
+npx github:joaofmartinho/praxis-veritas tool remove cursor
 
 # See available adapters and which are enabled
-npx github:DFilipeS/praxis tool list
+npx github:joaofmartinho/praxis-veritas tool list
 ```
 
-Each adapter installs Praxis files to the tool's expected directory and generates tool-specific MCP configuration:
+Each adapter installs Praxis Veritas files to the tool's expected directory and generates tool-specific MCP configuration:
 
 | Tool          | File directory | MCP config                                                                       |
 | ------------- | -------------- | -------------------------------------------------------------------------------- |
@@ -246,16 +224,18 @@ Each adapter installs Praxis files to the tool's expected directory and generate
 
 Generated MCP configs contain env var _references_ (e.g., `${FIGMA_API_KEY}`), not secrets — they are safe to commit so the whole team benefits.
 
-When you add or remove components with `praxis components`, or update with `praxis update`, the tool configs are automatically regenerated for all enabled tools.
+When you add or remove components with `praxis-veritas components`, or update with `praxis-veritas update`, the tool configs are automatically regenerated for all enabled tools.
 
 ### File templates
 
-Templates for ideas, plans, and learnings live in `reference/template.md` under each skill directory. Modify them to match your team's preferences.
+Templates live under each skill's `reference/` directory and support progressive disclosure when a written artifact is useful.
 
 ## Design Principles
 
-- **Compounding knowledge** — px-retrospect learnings feed back into px-brainstorm and px-plan, so the system gets smarter with each cycle.
-- **Traceability** — Every plan links to its idea, every learning links to its plan. Status fields track documents through the full lifecycle.
+- **Veritas is canonical** — future sessions should rely on `Veritas` first, not on temporary run artifacts or `vault/`.
+- **Transmutation over accumulation** — work should end by updating durable knowledge, not by leaving a pile of dated files behind.
+- **Vault is secondary** — `vault/` keeps shaping documents, provenance, and narrative, but `Veritas` must stand on its own after transmutation.
+- **Traceability without dependence** — temporary run artifacts and historical run records can support provenance, but `Veritas` must stand on its own after transmutation.
 - **Configurability** — Reviewers are discoverable by convention. Add or remove them per project without changing any configuration.
 
 ## License

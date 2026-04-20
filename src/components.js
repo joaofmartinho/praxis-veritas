@@ -1,10 +1,9 @@
 // Keep in sync with the core skills in praxis/skills/ in this repository.
 const CORE_SKILLS = new Set([
-  "px-brainstorm",
-  "px-plan",
+  "px-shape",
   "px-implement",
   "px-review",
-  "px-retrospect",
+  "px-transmute",
 ]);
 
 /**

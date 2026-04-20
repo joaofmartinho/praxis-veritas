@@ -86,12 +86,12 @@ export async function toolAdd(names, { ref = "main" } = {}) {
   const projectRoot = process.cwd();
   const resolvedRoot = resolve(projectRoot);
 
-  p.intro(pc.bold("Praxis — Tool Add"));
+  p.intro(pc.bold("Praxis Veritas — Tool Add"));
 
   const manifest = await readManifest(projectRoot);
   if (!manifest) {
     p.log.error(
-      'Praxis is not initialized in this project. Run "praxis init" first.'
+      'Praxis Veritas is not initialized in this project. Run "praxis-veritas init" first.'
     );
     process.exit(1);
   }
@@ -225,12 +225,12 @@ export async function toolRemove(names) {
   const projectRoot = process.cwd();
   const resolvedRoot = resolve(projectRoot);
 
-  p.intro(pc.bold("Praxis — Tool Remove"));
+  p.intro(pc.bold("Praxis Veritas — Tool Remove"));
 
   const manifest = await readManifest(projectRoot);
   if (!manifest) {
     p.log.error(
-      'Praxis is not initialized in this project. Run "praxis init" first.'
+      'Praxis Veritas is not initialized in this project. Run "praxis-veritas init" first.'
     );
     process.exit(1);
   }
@@ -257,7 +257,7 @@ export async function toolRemove(names) {
   let totalSkipped = 0;
   const removedDirs = new Set();
 
-  // Remove Praxis-managed files from the tool's directories
+  // Remove Praxis Veritas-managed files from the tool's directories
   for (const name of names) {
     const adapter = getAdapter(name);
     /* v8 ignore next */
@@ -346,12 +346,12 @@ export async function toolRemove(names) {
 export async function toolList() {
   const projectRoot = process.cwd();
 
-  p.intro(pc.bold("Praxis — Tool List"));
+  p.intro(pc.bold("Praxis Veritas — Tool List"));
 
   const manifest = await readManifest(projectRoot);
   if (!manifest) {
     p.log.error(
-      'Praxis is not initialized in this project. Run "praxis init" first.'
+      'Praxis Veritas is not initialized in this project. Run "praxis-veritas init" first.'
     );
     process.exit(1);
   }

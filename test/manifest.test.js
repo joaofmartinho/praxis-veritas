@@ -6,6 +6,7 @@ import {
   hashContent,
   hashFile,
   readManifest,
+  readManifestInfo,
   writeManifest,
   isLocallyModified,
   isDestinationModified,
@@ -63,7 +64,16 @@ describe('readManifest', () => {
     await rm(tmpDir, { recursive: true, force: true });
   });
 
-  it('returns parsed JSON when .praxis-manifest.json exists', async () => {
+  it('returns parsed JSON when .praxis-veritas-manifest.json exists', async () => {
+    const manifest = { version: 1, files: {}, enabledTools: [] };
+    await writeFile(
+      join(tmpDir, '.praxis-veritas-manifest.json'),
+      JSON.stringify(manifest),
+    );
+    expect(await readManifest(tmpDir)).toEqual(manifest);
+  });
+
+  it('reads the legacy manifest filename when the new one is missing', async () => {
     const manifest = { version: 1, files: {}, enabledTools: [] };
     await writeFile(
       join(tmpDir, '.praxis-manifest.json'),
@@ -72,10 +82,23 @@ describe('readManifest', () => {
     expect(await readManifest(tmpDir)).toEqual(manifest);
   });
 
+  it('returns manifest metadata for a legacy manifest', async () => {
+    const manifest = { version: 1, files: {}, enabledTools: [] };
+    await writeFile(
+      join(tmpDir, '.praxis-manifest.json'),
+      JSON.stringify(manifest),
+    );
+    await expect(readManifestInfo(tmpDir)).resolves.toMatchObject({
+      manifest,
+      fileName: '.praxis-manifest.json',
+      isLegacy: true,
+    });
+  });
+
   it('defaults enabledTools to [] for old manifests lacking the field', async () => {
     const manifest = { version: 1, files: {} };
     await writeFile(
-      join(tmpDir, '.praxis-manifest.json'),
+      join(tmpDir, '.praxis-veritas-manifest.json'),
       JSON.stringify(manifest),
     );
     const result = await readManifest(tmpDir);
@@ -85,7 +108,7 @@ describe('readManifest', () => {
   it('preserves existing enabledTools when present', async () => {
     const manifest = { version: 1, files: {}, enabledTools: ['claude-code'] };
     await writeFile(
-      join(tmpDir, '.praxis-manifest.json'),
+      join(tmpDir, '.praxis-veritas-manifest.json'),
       JSON.stringify(manifest),
     );
     const result = await readManifest(tmpDir);
@@ -97,7 +120,7 @@ describe('readManifest', () => {
   });
 
   it('throws on invalid JSON', async () => {
-    await writeFile(join(tmpDir, '.praxis-manifest.json'), '{not valid json');
+    await writeFile(join(tmpDir, '.praxis-veritas-manifest.json'), '{not valid json');
     await expect(readManifest(tmpDir)).rejects.toThrow(SyntaxError);
   });
 });
@@ -117,7 +140,7 @@ describe('writeManifest', () => {
     const manifest = { version: 1, files: {} };
     await writeManifest(tmpDir, manifest);
     const { readFile } = await import('node:fs/promises');
-    const raw = await readFile(join(tmpDir, '.praxis-manifest.json'), 'utf-8');
+    const raw = await readFile(join(tmpDir, '.praxis-veritas-manifest.json'), 'utf-8');
     expect(raw.endsWith('\n')).toBe(true);
     expect(JSON.parse(raw)).toEqual(manifest);
   });
@@ -133,6 +156,19 @@ describe('writeManifest', () => {
     await writeManifest(tmpDir, manifest);
     const result = await readManifest(tmpDir);
     expect(result.enabledTools).toEqual(['cursor', 'opencode']);
+  });
+
+  it('removes the legacy manifest file after writing the new manifest', async () => {
+    const manifest = { version: 1, files: {}, enabledTools: [] };
+    await writeFile(
+      join(tmpDir, '.praxis-manifest.json'),
+      JSON.stringify(manifest),
+    );
+
+    await writeManifest(tmpDir, manifest);
+
+    const { access } = await import('node:fs/promises');
+    await expect(access(join(tmpDir, '.praxis-manifest.json'))).rejects.toThrow();
   });
 });
 

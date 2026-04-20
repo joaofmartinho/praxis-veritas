@@ -51,7 +51,7 @@ describe("status", () => {
       expect.stringContaining("not installed")
     );
     expect(p.outro).toHaveBeenCalledWith(
-      expect.stringContaining("praxis init")
+      expect.stringContaining("praxis-veritas init")
     );
   });
 

@@ -1,30 +1,42 @@
 ---
 name: px-implement
-description: "Executes an implementation plan by writing code. Use when ready to implement a plan that has been brainstormed, planned, and approved."
-argument-hint: "path to plan file, e.g. .ai-workflow/plans/20260222-offline-first-sync-phase-1.md"
+description: "Executes shaped work by writing code. Use when a piece of work has already been shaped and is ready for implementation."
+argument-hint: "a vault shape document path, current shape, or a short description of the work to implement"
 ---
 
 # Implementing
 
-Execute a concrete implementation plan by writing code. Follow the plan's steps precisely. **This is the only skill that produces code.**
+Execute shaped work by writing code. Follow the implementation shape precisely. **This is the only skill that produces code.**
 
 ## How a session works
 
-### 1. Load the plan
+### 1. Load the implementation shape
 
-If `$ARGUMENTS` is provided, treat it as the path to a plan file and read it. Otherwise, ask the user which plan to implement. Only accept plans with `status: ready`.
+If `$ARGUMENTS` is provided, treat it as the shaping context:
 
-Read the plan thoroughly, including:
-- The goal and background
-- The research summary (this contains relevant existing code, learnings, and best practices — no need to re-research)
-- All steps and acceptance criteria
-- Dependencies (verify they are met before starting)
+- a path to a shape document under `.ai-workflow/vault/`
+- a short description of the already-shaped work
+- or "current shape" when the shaping context is already clear in the thread
 
-Update the plan's `status` to `in-progress`.
+Otherwise, ask the user what shaped work to implement.
+
+Prefer using the vault shape document whenever one exists. That document is the default implementation brief produced by `px-shape`.
+
+If a vault shape document exists for this run, use it. Do not ignore it and re-plan from scratch in the implementation step.
+
+Before writing code, make sure you understand:
+
+- the goal and desired outcome
+- the chosen direction
+- the main affected areas
+- the constraints and rollout notes
+- the acceptance criteria
+
+If the shaping context is unclear or incomplete, stop and clarify rather than improvising.
 
 ### 2. Set up a branch
 
-Before doing anything with Git, **always ask the user** using the AskUserQuestion tool what they'd like to do. Present these options:
+Before doing anything with Git, **always ask the user** what they'd like to do. Present these options:
 
 1. **Stay on the current branch** — continue working on whatever branch is currently checked out.
 2. **Create a new branch from the current branch** — use a descriptive name based on the plan slug (e.g., `implement/offline-first-sync-phase-1`).
@@ -34,7 +46,7 @@ Wait for the user's answer before proceeding. Follow their choice exactly.
 
 ### 3. Implement step by step
 
-Work through the plan's steps in order. For each step:
+Work through the shaped implementation in small, verifiable units. For each unit:
 
 1. Confirm what you're about to do
 2. Write the code
@@ -42,11 +54,11 @@ Work through the plan's steps in order. For each step:
 4. Commit the work (see Git conventions below)
 5. Move to the next step
 
-If something in the plan is ambiguous or doesn't work as described, stop and ask the user rather than guessing. The plan should have enough detail — if it doesn't, that's a signal to clarify, not to improvise. Once clarified, update the plan file with the new information so it stays accurate and complete.
+If something in the shape is ambiguous or doesn't work as expected, stop and ask the user rather than guessing. If execution materially changes the shape, update the vault shape document so it stays accurate for the remainder of the run.
 
 ### 4. Verify acceptance criteria
 
-After all steps are complete, go through each acceptance criterion from the plan and verify it's met. Report the results to the user:
+After implementation is complete, go through each acceptance criterion from the shaping context and verify it is met. Report the results to the user:
 
 - [ ] Criterion — ✅ met / ❌ not met (explain why)
 
@@ -60,11 +72,14 @@ Instead, tell the user to run px-review in a fresh thread (or use `handoff` to s
 
 > "Implementation is complete. To run the automated review with a clean context, start a new thread and invoke **px-review** against the changed files."
 
-### 6. Update related documents
+### 6. Prepare for transmutation
 
 After implementation and review are complete:
-- Update the plan's acceptance criteria checkboxes to reflect final state
-- Leave the plan's `status` as `in-progress` (the px-retrospect skill will set it to `done`)
+
+- keep the vault shape document accurate if implementation materially changed the plan
+- make sure the work can be transmuted cleanly into `Veritas`
+- do not treat vault shape documents as canonical knowledge
+- hand off to `px-transmute` once the work and review are settled
 
 ## Git conventions
 
@@ -74,11 +89,11 @@ Commits should tell a story to reviewers (AI or human). It is fine to have multi
 
 ## Behavioral rules
 
-- **Follow the plan.** The plan was researched, written, and approved for a reason. Don't deviate without the user's explicit agreement.
+- **Follow the shape.** The work was shaped for a reason. Don't deviate without the user's explicit agreement.
 - **Work incrementally.** Small changes, verified as you go. Don't write all the code at once and hope it works.
-- **Stop on ambiguity.** If a step is unclear, ask. Don't interpret creatively.
-- **Don't over-engineer.** Implement exactly what the plan says. No extra features, no "while we're here" improvements.
+- **Stop on ambiguity.** If something is unclear, ask. Don't interpret creatively.
+- **Don't over-engineer.** Implement exactly what the shaped scope calls for. No extra features, no "while we're here" improvements.
 - **Test as you go.** Run relevant tests after each step, not just at the end.
 - **Don't skip the review.** Always hand off to px-review after implementation.
-- **Minimize reads.** The plan's research summary already contains relevant code snippets and patterns — don't re-read files whose relevant sections are already quoted there. When you do need to read a file, read it once and make all related edits before moving on. Use targeted line ranges (from the plan's step details) instead of reading entire files.
+- **Start from Veritas and the current shape document.** Do not dig through the vault unless the canonical knowledge or shape document is insufficient.
 - **Batch related edits.** When a step requires multiple changes to the same file, make them all in sequence after a single read, then run tests once. Don't interleave reads and edits on the same file.

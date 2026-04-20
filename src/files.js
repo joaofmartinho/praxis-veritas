@@ -35,7 +35,7 @@ export async function installFile(fullPath, relativePath, content) {
     let action = await p.select({
       message: `${relativePath} already exists and differs. What would you like to do?`,
       options: [
-        { value: "overwrite", label: "Overwrite with Praxis version" },
+        { value: "overwrite", label: "Overwrite with Praxis Veritas version" },
         { value: "skip", label: "Skip this file" },
         { value: "diff", label: "Show diff, then decide" },
       ],
@@ -51,14 +51,14 @@ export async function installFile(fullPath, relativePath, content) {
         existingContent,
         content,
         "your version",
-        "praxis"
+        "praxis-veritas"
       );
       p.log.info(patch);
 
       action = await p.select({
         message: `Overwrite ${relativePath}?`,
         options: [
-          { value: "overwrite", label: "Overwrite with Praxis version" },
+          { value: "overwrite", label: "Overwrite with Praxis Veritas version" },
           { value: "skip", label: "Skip this file" },
         ],
       });

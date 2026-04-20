@@ -200,8 +200,8 @@ describe("amp-code adapter", () => {
     expect(adapter.getDestinationPath("praxis/conventions.md")).toBe(
       ".agents/conventions.md"
     );
-    expect(adapter.getDestinationPath("praxis/skills/px-brainstorm/SKILL.md")).toBe(
-      ".agents/skills/px-brainstorm/SKILL.md"
+    expect(adapter.getDestinationPath("praxis/skills/px-shape/SKILL.md")).toBe(
+      ".agents/skills/px-shape/SKILL.md"
     );
     expect(adapter.getDestinationPath("praxis/agents/reviewers/security.md")).toBe(
       ".agents/agents/reviewers/security.md"
@@ -224,11 +224,11 @@ describe("amp-code adapter", () => {
     const managed = adapter.getManagedFiles([
       "praxis/conventions.md",
       "README.md",
-      "praxis/skills/px-brainstorm/SKILL.md",
+      "praxis/skills/px-shape/SKILL.md",
     ]);
     expect(managed).toEqual([
       ".agents/conventions.md",
-      ".agents/skills/px-brainstorm/SKILL.md",
+      ".agents/skills/px-shape/SKILL.md",
     ]);
   });
 
@@ -244,8 +244,8 @@ describe("claude-code adapter", () => {
     expect(adapter.getDestinationPath("praxis/conventions.md")).toBe(
       ".claude/conventions.md"
     );
-    expect(adapter.getDestinationPath("praxis/skills/px-brainstorm/SKILL.md")).toBe(
-      ".claude/skills/px-brainstorm/SKILL.md"
+    expect(adapter.getDestinationPath("praxis/skills/px-shape/SKILL.md")).toBe(
+      ".claude/skills/px-shape/SKILL.md"
     );
     expect(adapter.getDestinationPath("praxis/agents/reviewers/security.md")).toBe(
       ".claude/agents/reviewers/security.md"

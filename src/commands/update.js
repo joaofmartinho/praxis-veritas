@@ -16,16 +16,16 @@ import { getComponentForFile, getSelectedComponents } from "../components.js";
 import { installFile, installToDestinations, isSafePath } from "../files.js";
 import { getAdapter, regenerateToolConfigs } from "../adapters.js";
 
-export async function update({ ref = "main" } = {}) {
+export async function update({ ref = "main", migratingFromLegacy = false } = {}) {
   const projectRoot = process.cwd();
   const resolvedRoot = resolve(projectRoot);
 
-  p.intro(pc.bold("Praxis — Update"));
+  p.intro(pc.bold("Praxis Veritas — Update"));
 
   const manifest = await readManifest(projectRoot);
   if (!manifest) {
     p.log.error(
-      'Praxis is not initialized in this project. Run "praxis init" first.'
+      'Praxis Veritas is not initialized in this project. Run "praxis-veritas init" first.'
     );
     process.exit(1);
   }
@@ -102,9 +102,20 @@ export async function update({ ref = "main" } = {}) {
     changedFiles.length === 0 &&
     removedFiles.length === 0
   ) {
+    if (migratingFromLegacy) {
+      const updatedManifest = {
+        ...manifest,
+        updatedAt: new Date().toISOString(),
+        selectedComponents: currentSelection,
+        files: { ...manifest.files },
+      };
+      await writeManifest(projectRoot, updatedManifest);
+      p.log.info('Migrated manifest to ".praxis-veritas-manifest.json".');
+    }
+
     if (newUnselectedComponents.size > 0) {
       p.log.info(
-        `${newUnselectedComponents.size} new optional component(s) available. Run \`praxis components\` to review.`
+        `${newUnselectedComponents.size} new optional component(s) available. Run \`praxis-veritas components\` to review.`
       );
     }
     p.outro("Everything is up to date!");
@@ -116,11 +127,11 @@ export async function update({ ref = "main" } = {}) {
     p.log.info(`${pc.green(newFiles.length)} new file(s) to add`);
   }
   if (changedFiles.length > 0) {
-    p.log.info(`${pc.yellow(changedFiles.length)} file(s) changed in Praxis`);
+    p.log.info(`${pc.yellow(changedFiles.length)} file(s) changed in Praxis Veritas`);
   }
   if (removedFiles.length > 0) {
     p.log.info(
-      `${pc.red(removedFiles.length)} file(s) removed from Praxis`
+      `${pc.red(removedFiles.length)} file(s) removed from Praxis Veritas`
     );
   }
 
@@ -135,7 +146,7 @@ export async function update({ ref = "main" } = {}) {
 
   // Handle new files
   for (const { relativePath, content } of newFiles) {
-    if (enabledTools.length > 0) {
+    if (enabledTools.length > 0 && relativePath.startsWith("praxis/")) {
       const { hash, destinations } = await installToDestinations(
         projectRoot,
         resolvedRoot,
@@ -171,7 +182,7 @@ export async function update({ ref = "main" } = {}) {
 
   // Handle changed files
   for (const { relativePath, content, hash } of changedFiles) {
-    if (enabledTools.length > 0) {
+    if (enabledTools.length > 0 && relativePath.startsWith("praxis/")) {
       // Per-tool destination update
       const entry = manifest.files[relativePath];
       const oldDestinations = entry?.destinations || {};
@@ -205,9 +216,9 @@ export async function update({ ref = "main" } = {}) {
           // Destination was locally modified — prompt
           const localContent = await readFile(fullDest, "utf-8");
           let action = await p.select({
-            message: `${destPath} has local changes and a new Praxis version. What would you like to do?`,
+            message: `${destPath} has local changes and a new Praxis Veritas version. What would you like to do?`,
             options: [
-              { value: "overwrite", label: "Overwrite with new Praxis version" },
+              { value: "overwrite", label: "Overwrite with new Praxis Veritas version" },
               { value: "skip", label: "Keep your version" },
               { value: "diff", label: "Show diff, then decide" },
             ],
@@ -224,14 +235,14 @@ export async function update({ ref = "main" } = {}) {
               localContent,
               content,
               "your version",
-              "new praxis version"
+              "new praxis-veritas version"
             );
             p.log.info(patch);
 
             action = await p.select({
               message: `Overwrite ${destPath}?`,
               options: [
-                { value: "overwrite", label: "Overwrite with new Praxis version" },
+                { value: "overwrite", label: "Overwrite with new Praxis Veritas version" },
                 { value: "skip", label: "Keep your version" },
               ],
             });
@@ -282,9 +293,9 @@ export async function update({ ref = "main" } = {}) {
       } else {
         const localContent = await readFile(fullPath, "utf-8");
         let action = await p.select({
-          message: `${relativePath} has local changes and a new Praxis version. What would you like to do?`,
+          message: `${relativePath} has local changes and a new Praxis Veritas version. What would you like to do?`,
           options: [
-            { value: "overwrite", label: "Overwrite with new Praxis version" },
+            { value: "overwrite", label: "Overwrite with new Praxis Veritas version" },
             { value: "skip", label: "Keep your version" },
             { value: "diff", label: "Show diff, then decide" },
           ],
@@ -301,7 +312,7 @@ export async function update({ ref = "main" } = {}) {
             localContent,
             content,
             "your version",
-            "new praxis version"
+            "new praxis-veritas version"
           );
           p.log.info(patch);
 
@@ -310,7 +321,7 @@ export async function update({ ref = "main" } = {}) {
             options: [
               {
                 value: "overwrite",
-                label: "Overwrite with new Praxis version",
+                label: "Overwrite with new Praxis Veritas version",
               },
               { value: "skip", label: "Keep your version" },
             ],
@@ -338,7 +349,7 @@ export async function update({ ref = "main" } = {}) {
   // Handle removed files
   for (const relativePath of removedFiles) {
     // Silently drop manifest entries for deselected optional components —
-    // they were already removed (or never installed) by `praxis components`.
+    // they were already removed (or never installed) by `praxis-veritas components`.
     const component = getComponentForFile(relativePath);
     if (component) {
       const isSelected =
@@ -371,7 +382,7 @@ export async function update({ ref = "main" } = {}) {
 
         const warning = modified ? ` ${pc.yellow("(locally modified)")}` : "";
         const shouldRemove = await p.confirm({
-          message: `${destPath} was removed from Praxis.${warning} Delete it?`,
+          message: `${destPath} was removed from Praxis Veritas.${warning} Delete it?`,
         });
 
         if (p.isCancel(shouldRemove)) {
@@ -412,7 +423,7 @@ export async function update({ ref = "main" } = {}) {
         : "";
 
       const shouldRemove = await p.confirm({
-        message: `${relativePath} was removed from Praxis.${warning} Delete it?`,
+        message: `${relativePath} was removed from Praxis Veritas.${warning} Delete it?`,
       });
 
       if (p.isCancel(shouldRemove)) {
@@ -468,8 +479,8 @@ export async function update({ ref = "main" } = {}) {
   if (skipped > 0) parts.push(`${pc.dim(skipped)} skipped`);
 
   if (newUnselectedComponents.size > 0) {
-    p.log.info(
-      `${newUnselectedComponents.size} new optional component(s) available. Run \`praxis components\` to review.`
+      p.log.info(
+      `${newUnselectedComponents.size} new optional component(s) available. Run \`praxis-veritas components\` to review.`
     );
   }
 

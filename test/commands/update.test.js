@@ -134,6 +134,28 @@ describe("update command", () => {
     );
   });
 
+  it("updates .ai-workflow starter files locally even when tools are enabled", async () => {
+    await writeTestFile(".ai-workflow/veritas/index.md", "old veritas");
+
+    readManifest.mockResolvedValue({
+      ...makeManifest({
+        ".ai-workflow/veritas/index.md": { hash: hashContent("old veritas") },
+      }),
+      enabledTools: ["cursor"],
+    });
+    fetchTemplates.mockResolvedValue(
+      new Map([[".ai-workflow/veritas/index.md", "new veritas"]])
+    );
+
+    await update();
+
+    const content = await readFile(
+      join(tmpDir, ".ai-workflow/veritas/index.md"),
+      "utf-8"
+    );
+    expect(content).toBe("new veritas");
+  });
+
   it("skips new file when it already exists on disk and user chooses skip", async () => {
     // File exists locally but is not yet tracked in the manifest
     await writeTestFile("praxis/new.md", "local version");
@@ -225,7 +247,7 @@ describe("update command", () => {
     expect(p.log.success).not.toHaveBeenCalledWith(expect.stringContaining("added"));
     expect(p.log.warn).not.toHaveBeenCalled();
     const manifest = JSON.parse(
-      await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8")
+      await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8")
     );
     expect(manifest.files["praxis/new.md"]).toBeTruthy();
   });
@@ -366,7 +388,7 @@ describe("update command", () => {
     await update();
 
     const manifest = JSON.parse(
-      await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8")
+      await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8")
     );
     expect(manifest.files).not.toHaveProperty("praxis/gone.md");
   });
@@ -512,7 +534,7 @@ describe("update command", () => {
     await update();
 
     const manifest = JSON.parse(
-      await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8")
+      await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8")
     );
     expect(manifest.files["praxis/a.md"].hash).toBe(hashContent("v2"));
     expect(manifest.updatedAt).not.toBe("2026-01-01T00:00:00Z");
@@ -559,7 +581,7 @@ describe("update command", () => {
       expect.stringContaining("new optional component(s) available")
     );
     expect(p.log.info).toHaveBeenCalledWith(
-      expect.stringContaining("praxis components")
+      expect.stringContaining("praxis-veritas components")
     );
   });
 
@@ -653,7 +675,7 @@ describe("update command", () => {
     expect(p.confirm).not.toHaveBeenCalled();
 
     // Manifest entry silently removed
-    const raw = await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8");
+    const raw = await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8");
     const manifest = JSON.parse(raw);
     expect(manifest.files[SKILL_FILE]).toBeUndefined();
   });
@@ -678,7 +700,7 @@ describe("update command", () => {
     await update();
 
     expect(p.confirm).not.toHaveBeenCalled();
-    const raw = await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8");
+    const raw = await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8");
     const manifest = JSON.parse(raw);
     expect(manifest.files[REVIEWER_FILE]).toBeUndefined();
   });
@@ -840,7 +862,7 @@ describe("update command", () => {
     expect(existsSync(join(tmpDir, ".cursor/conventions.md"))).toBe(true);
 
     const manifest = JSON.parse(
-      await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8")
+      await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8")
     );
     expect(manifest.files["praxis/conventions.md"].destinations).toEqual({
       "amp-code": ".agents/conventions.md",
@@ -1005,7 +1027,7 @@ describe("update command", () => {
       "locally modified"
     );
     const manifest = JSON.parse(
-      await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8")
+      await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8")
     );
     expect(manifest.files["praxis/conventions.md"].hash).toBe(oldHash);
   });
@@ -1077,7 +1099,7 @@ describe("update command", () => {
     await update();
 
     const manifest = JSON.parse(
-      await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8")
+      await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8")
     );
     const newHash = hashContent("v2");
     expect(manifest.files["praxis/conventions.md"].hash).toBe(oldHash);
@@ -1104,7 +1126,7 @@ describe("update command", () => {
     await update();
 
     const manifest = JSON.parse(
-      await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8")
+      await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8")
     );
     expect(manifest.files["praxis/conventions.md"].destinations["amp-code"]).toBe(
       ".agents/conventions.md"
@@ -1133,7 +1155,7 @@ describe("update command", () => {
     await update();
 
     const manifest = JSON.parse(
-      await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8")
+      await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8")
     );
     const entry = manifest.files["praxis/conventions.md"];
     // cursor was skipped and had no old destination — should not be in destinations
@@ -1223,7 +1245,7 @@ describe("update command", () => {
     await update();
 
     const manifest = JSON.parse(
-      await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8")
+      await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8")
     );
     expect(manifest.files["praxis/old.md"]).toBeUndefined();
     expect(p.confirm).not.toHaveBeenCalled();

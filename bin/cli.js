@@ -7,15 +7,15 @@ const require = createRequire(import.meta.url);
 const { version } = require("../package.json");
 
 program
-  .name("praxis")
+  .name("praxis-veritas")
   .description(
-    "Install, update, and manage Praxis agent skills in your project"
+    "Install, update, and manage Praxis Veritas agent skills in your project"
   )
   .version(version);
 
 program
   .command("init")
-  .description("Initialize Praxis in the current project")
+  .description("Initialize Praxis Veritas in the current project")
   .option("--ref <ref>", "Git ref (branch/tag/sha) to fetch templates from", "main")
   .action(async (opts) => {
     const { init } = await import("../src/commands/init.js");
@@ -24,7 +24,7 @@ program
 
 program
   .command("update")
-  .description("Update Praxis files to the latest version")
+  .description("Update Praxis Veritas files to the latest version")
   .option("--ref <ref>", "Git ref (branch/tag/sha) to fetch templates from", "main")
   .action(async (opts) => {
     const { update } = await import("../src/commands/update.js");
@@ -42,7 +42,7 @@ program
 
 program
   .command("status")
-  .description("Show the status of managed Praxis files")
+  .description("Show the status of managed Praxis Veritas files")
   .action(async () => {
     const { status } = await import("../src/commands/status.js");
     await status();

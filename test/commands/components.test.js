@@ -127,7 +127,7 @@ describe("components", () => {
     );
 
     // Manifest updated
-    const raw = await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8");
+    const raw = await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8");
     const manifest = JSON.parse(raw);
     expect(manifest.selectedComponents).toEqual({ skills: ["agent-browser"], reviewers: [] });
     expect(manifest.files[BROWSER_SKILL]).toBeTruthy();
@@ -158,7 +158,7 @@ describe("components", () => {
 
     expect(existsSync(join(tmpDir, BROWSER_SKILL))).toBe(false);
 
-    const raw = await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8");
+    const raw = await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8");
     const manifest = JSON.parse(raw);
     expect(manifest.selectedComponents).toEqual({ skills: [], reviewers: [] });
     expect(manifest.files[BROWSER_SKILL]).toBeUndefined();
@@ -261,7 +261,7 @@ describe("components", () => {
     // status === "matched" — filesAdded stays 0, no "file(s) added" in summary
     expect(p.outro).toHaveBeenCalledWith(expect.not.stringContaining("file(s) added"));
 
-    const raw = await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8");
+    const raw = await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8");
     const manifest = JSON.parse(raw);
     expect(manifest.files[BROWSER_SKILL]).toBeTruthy();
     expect(manifest.selectedComponents).toEqual({ skills: ["agent-browser"], reviewers: [] });
@@ -279,7 +279,7 @@ describe("components", () => {
 
     expect(existsSync(join(tmpDir, SECURITY_REVIEWER))).toBe(true);
 
-    const raw = await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8");
+    const raw = await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8");
     const manifest = JSON.parse(raw);
     expect(manifest.selectedComponents).toEqual({ skills: [], reviewers: ["security"] });
     expect(manifest.files[SECURITY_REVIEWER]).toBeTruthy();
@@ -367,7 +367,7 @@ describe("components", () => {
 
     await components();
 
-    const raw = await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8");
+    const raw = await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8");
     const manifest = JSON.parse(raw);
     expect(manifest.files[BROWSER_SKILL]).toBeUndefined();
     expect(manifest.selectedComponents).toEqual({ skills: [], reviewers: [] });
@@ -537,7 +537,7 @@ describe("components", () => {
 
     // Partial manifest should have been written with the user's intended selection
     // so the manifest reflects what was being applied, not the old stale state
-    const raw = await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8");
+    const raw = await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8");
     const manifest = JSON.parse(raw);
     expect(manifest.selectedComponents).toEqual({ skills: ["agent-browser"], reviewers: [] });
   });
@@ -546,7 +546,7 @@ describe("components", () => {
     fetchTemplates.mockResolvedValue(
       new Map([
         [CORE_FILE, "# Core"],
-        ["praxis/skills/px-brainstorm/SKILL.md", "# Core skill"],
+        ["praxis/skills/px-shape/SKILL.md", "# Core skill"],
       ])
     );
 
@@ -660,7 +660,7 @@ describe("components", () => {
     expect(existsSync(join(tmpDir, ".agents/skills/agent-browser/SKILL.md"))).toBe(true);
 
     const manifest = JSON.parse(
-      await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8")
+      await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8")
     );
     expect(manifest.files[BROWSER_SKILL].destinations["amp-code"]).toBe(
       ".agents/skills/agent-browser/SKILL.md"
@@ -734,7 +734,7 @@ describe("components", () => {
 
     await components();
 
-    const raw = await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8");
+    const raw = await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8");
     const manifest = JSON.parse(raw);
     expect(manifest.files[BROWSER_SKILL]).toBeUndefined();
   });

@@ -29,17 +29,20 @@ describe('fetchTemplates', () => {
     globalThis.fetch = originalFetch;
   });
 
-  it('returns a Map of praxis/ files from a valid tarball', async () => {
+  it('returns a Map of praxis/ and .ai-workflow/ files from a valid tarball', async () => {
     const tmpDir = await mkdtemp(join(tmpdir(), 'test-tarball-'));
     try {
-      const prefixDir = join(tmpDir, 'DFilipeS-praxis-abc123');
+      const prefixDir = join(tmpDir, 'joaofmartinho-praxis-veritas-abc123');
       await mkdir(join(prefixDir, 'praxis'), { recursive: true });
+      await mkdir(join(prefixDir, '.ai-workflow', 'veritas'), { recursive: true });
       await writeFile(join(prefixDir, 'praxis', 'test.md'), '# Test');
+      await writeFile(join(prefixDir, '.ai-workflow', '.gitignore'), '*');
+      await writeFile(join(prefixDir, '.ai-workflow', 'veritas', 'index.md'), '# Veritas');
       await writeFile(join(prefixDir, 'README.md'), '# Readme');
 
       await createTar(
         { gzip: true, file: join(tmpDir, 'test.tar.gz'), cwd: tmpDir },
-        ['DFilipeS-praxis-abc123'],
+        ['joaofmartinho-praxis-veritas-abc123'],
       );
       const tarBuffer = await readFile(join(tmpDir, 'test.tar.gz'));
 
@@ -51,6 +54,8 @@ describe('fetchTemplates', () => {
       expect(files).toBeInstanceOf(Map);
       expect(files.has('praxis/test.md')).toBe(true);
       expect(files.get('praxis/test.md')).toBe('# Test');
+      expect(files.has('.ai-workflow/.gitignore')).toBe(true);
+      expect(files.has('.ai-workflow/veritas/index.md')).toBe(true);
       expect(files.has('README.md')).toBe(false);
     } finally {
       await rm(tmpDir, { recursive: true, force: true });
@@ -94,18 +99,20 @@ describe('fetchTemplates', () => {
     await expect(fetchTemplates()).rejects.toThrow('too large');
   });
 
-  it('filters out non-praxis/ files from the tarball', async () => {
+  it('filters out non-template files from the tarball', async () => {
     const tmpDir = await mkdtemp(join(tmpdir(), 'test-tarball-'));
     try {
-      const prefixDir = join(tmpDir, 'DFilipeS-praxis-abc123');
+      const prefixDir = join(tmpDir, 'joaofmartinho-praxis-veritas-abc123');
       await mkdir(join(prefixDir, 'praxis', 'sub'), { recursive: true });
+      await mkdir(join(prefixDir, '.ai-workflow', 'vault'), { recursive: true });
       await writeFile(join(prefixDir, 'praxis', 'skill.md'), '# Skill');
       await writeFile(join(prefixDir, 'praxis', 'sub', 'nested.md'), '# Nested');
+      await writeFile(join(prefixDir, '.ai-workflow', 'vault', 'README.md'), '# Vault');
       await writeFile(join(prefixDir, 'README.md'), '# Readme');
 
       await createTar(
         { gzip: true, file: join(tmpDir, 'test.tar.gz'), cwd: tmpDir },
-        ['DFilipeS-praxis-abc123'],
+        ['joaofmartinho-praxis-veritas-abc123'],
       );
       const tarBuffer = await readFile(join(tmpDir, 'test.tar.gz'));
 
@@ -115,10 +122,13 @@ describe('fetchTemplates', () => {
       const files = await fetchTemplates();
 
       for (const key of files.keys()) {
-        expect(key.startsWith('praxis/')).toBe(true);
+        expect(
+          key.startsWith('praxis/') || key.startsWith('.ai-workflow/')
+        ).toBe(true);
       }
       expect(files.has('praxis/skill.md')).toBe(true);
       expect(files.has('praxis/sub/nested.md')).toBe(true);
+      expect(files.has('.ai-workflow/vault/README.md')).toBe(true);
     } finally {
       await rm(tmpDir, { recursive: true, force: true });
     }

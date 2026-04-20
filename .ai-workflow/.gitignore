@@ -1,0 +1,7 @@
+*
+!.gitignore
+!tags
+!vault/
+!vault/**
+!veritas/
+!veritas/**

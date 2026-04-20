@@ -1,8 +1,9 @@
 import { createHash, randomUUID } from "node:crypto";
-import { readFile, rename, writeFile } from "node:fs/promises";
+import { readFile, rename, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
-const MANIFEST_FILE = ".praxis-manifest.json";
+const MANIFEST_FILE = ".praxis-veritas-manifest.json";
+const LEGACY_MANIFEST_FILE = ".praxis-manifest.json";
 
 export function hashContent(content) {
   return createHash("sha256").update(content).digest("hex");
@@ -13,18 +14,31 @@ export async function hashFile(filePath) {
   return hashContent(content);
 }
 
-export async function readManifest(projectRoot) {
-  try {
-    const raw = await readFile(join(projectRoot, MANIFEST_FILE), "utf-8");
-    const manifest = JSON.parse(raw);
-    if (!manifest.enabledTools) {
-      manifest.enabledTools = [];
+export async function readManifestInfo(projectRoot) {
+  for (const manifestFile of [MANIFEST_FILE, LEGACY_MANIFEST_FILE]) {
+    try {
+      const raw = await readFile(join(projectRoot, manifestFile), "utf-8");
+      const manifest = JSON.parse(raw);
+      if (!manifest.enabledTools) {
+        manifest.enabledTools = [];
+      }
+      return {
+        manifest,
+        fileName: manifestFile,
+        isLegacy: manifestFile === LEGACY_MANIFEST_FILE,
+      };
+    } catch (err) {
+      if (err.code === "ENOENT") continue;
+      throw err;
     }
-    return manifest;
-  } catch (err) {
-    if (err.code === "ENOENT") return null;
-    throw err;
   }
+
+  return null;
+}
+
+export async function readManifest(projectRoot) {
+  const info = await readManifestInfo(projectRoot);
+  return info ? info.manifest : null;
 }
 
 export async function writeManifest(projectRoot, manifest) {
@@ -32,6 +46,7 @@ export async function writeManifest(projectRoot, manifest) {
   const tmpPath = filePath + ".tmp." + randomUUID();
   await writeFile(tmpPath, JSON.stringify(manifest, null, 2) + "\n");
   await rename(tmpPath, filePath);
+  await rm(join(projectRoot, LEGACY_MANIFEST_FILE), { force: true });
 }
 
 /**

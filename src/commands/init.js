@@ -4,7 +4,7 @@ import { dirname, join, resolve } from "node:path";
 import * as p from "@clack/prompts";
 import pc from "picocolors";
 import { fetchTemplates } from "../templates.js";
-import { readManifest, writeManifest } from "../manifest.js";
+import { readManifestInfo, writeManifest } from "../manifest.js";
 import {
   discoverOptionalComponents,
   getCoreFiles,
@@ -19,12 +19,33 @@ export async function init({ ref = "main" } = {}) {
   const projectRoot = process.cwd();
   const resolvedRoot = resolve(projectRoot);
 
-  p.intro(pc.bold("Praxis — Initialize"));
+  p.intro(pc.bold("Praxis Veritas — Initialize"));
 
-  const existing = await readManifest(projectRoot);
+  const existing = await readManifestInfo(projectRoot);
+  if (existing?.isLegacy) {
+    const shouldMigrate = await p.confirm({
+      message:
+        'Found an existing Praxis installation tracked by ".praxis-manifest.json". Migrate it to Praxis Veritas now?',
+    });
+
+    if (p.isCancel(shouldMigrate)) {
+      p.cancel("Cancelled.");
+      process.exit(0);
+    }
+
+    if (!shouldMigrate) {
+      p.outro("Migration skipped. The existing Praxis installation was left unchanged.");
+      return;
+    }
+
+    p.log.info("Migrating existing Praxis installation to Praxis Veritas.");
+    const { update } = await import("./update.js");
+    return update({ ref, migratingFromLegacy: true });
+  }
+
   if (existing) {
     p.log.warn(
-      "Praxis is already initialized in this project. Running update instead."
+      "Praxis Veritas is already initialized in this project. Running update instead."
     );
     const { update } = await import("./update.js");
     return update({ ref });
@@ -107,8 +128,10 @@ export async function init({ ref = "main" } = {}) {
   let skipped = 0;
 
   for (const [relativePath, content] of [...filesToInstall.entries()].sort()) {
+    const isToolManagedFile = relativePath.startsWith("praxis/");
+
     // Install to each enabled tool's destination
-    if (enabledTools.length > 0) {
+    if (enabledTools.length > 0 && isToolManagedFile) {
       const { hash, destinations } = await installToDestinations(
         projectRoot,
         resolvedRoot,
@@ -138,9 +161,9 @@ export async function init({ ref = "main" } = {}) {
 
   // Create .ai-workflow directories (not tracked in manifest)
   for (const dir of [
-    ".ai-workflow/ideas",
-    ".ai-workflow/plans",
-    ".ai-workflow/learnings",
+    ".ai-workflow/veritas",
+    ".ai-workflow/vault",
+    ".ai-workflow/local",
   ]) {
     await mkdir(join(projectRoot, dir), { recursive: true });
   }
@@ -179,5 +202,5 @@ export async function init({ ref = "main" } = {}) {
   const summary = [`${pc.green(installed)} files installed`];
   if (skipped > 0) summary.push(`${pc.yellow(skipped)} files skipped`);
 
-  p.outro(`Praxis initialized! ${summary.join(", ")}.`);
+  p.outro(`Praxis Veritas initialized! ${summary.join(", ")}.`);
 }

@@ -43,13 +43,18 @@ beforeEach(async () => {
   p.spinner = vi.fn(() => ({ start: vi.fn(), stop: vi.fn() }));
   p.cancel = vi.fn();
   p.isCancel = vi.fn().mockReturnValue(false);
+  p.confirm = vi.fn().mockResolvedValue(true);
   p.multiselect = vi.fn().mockResolvedValue([]);
   p.groupMultiselect = vi.fn().mockResolvedValue([]);
+  update.mockReset();
 
   fetchTemplates.mockResolvedValue(
     new Map([
       ["praxis/test.md", "# Test"],
       ["praxis/sub/nested.md", "# Nested"],
+      [".ai-workflow/.gitignore", "*\n!.gitignore\n!tags\n!vault/\n!vault/**\n!veritas/\n!veritas/**\n"],
+      [".ai-workflow/veritas/index.md", "# Veritas"],
+      [".ai-workflow/vault/README.md", "# Vault"],
     ])
   );
 });
@@ -70,14 +75,23 @@ describe("init", () => {
       await readFile(join(tmpDir, "praxis/sub/nested.md"), "utf-8")
     ).toBe("# Nested");
 
-    expect(existsSync(join(tmpDir, ".ai-workflow/ideas"))).toBe(true);
-    expect(existsSync(join(tmpDir, ".ai-workflow/plans"))).toBe(true);
-    expect(existsSync(join(tmpDir, ".ai-workflow/learnings"))).toBe(true);
+    expect(existsSync(join(tmpDir, ".ai-workflow/veritas"))).toBe(true);
+    expect(existsSync(join(tmpDir, ".ai-workflow/vault"))).toBe(true);
+    expect(existsSync(join(tmpDir, ".ai-workflow/local"))).toBe(true);
+    expect(
+      await readFile(join(tmpDir, ".ai-workflow/.gitignore"), "utf-8")
+    ).toContain("!vault/");
+    expect(
+      await readFile(join(tmpDir, ".ai-workflow/veritas/index.md"), "utf-8")
+    ).toBe("# Veritas");
+    expect(
+      await readFile(join(tmpDir, ".ai-workflow/vault/README.md"), "utf-8")
+    ).toBe("# Vault");
 
     expect(await readFile(join(tmpDir, ".ai-workflow/tags"), "utf-8")).toBe("");
 
     const manifest = JSON.parse(
-      await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8")
+      await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8")
     );
     expect(manifest.version).toBe("1.0.0");
     expect(manifest.installedAt).toBeTruthy();
@@ -90,13 +104,13 @@ describe("init", () => {
     );
 
     expect(p.outro).toHaveBeenCalledWith(
-      expect.stringContaining("2 files installed")
+      expect.stringContaining("5 files installed")
     );
   });
 
   it("falls back to update when already initialized", async () => {
     await writeFile(
-      join(tmpDir, ".praxis-manifest.json"),
+      join(tmpDir, ".praxis-veritas-manifest.json"),
       JSON.stringify({ version: "1.0.0", files: {} })
     );
 
@@ -106,6 +120,38 @@ describe("init", () => {
       expect.stringContaining("already initialized")
     );
     expect(update).toHaveBeenCalled();
+  });
+
+  it("offers to migrate an existing legacy Praxis installation", async () => {
+    await writeFile(
+      join(tmpDir, ".praxis-manifest.json"),
+      JSON.stringify({ version: "1.0.0", files: {} })
+    );
+
+    await init();
+
+    expect(p.confirm).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: expect.stringContaining("Migrate it to Praxis Veritas"),
+      })
+    );
+    expect(update).toHaveBeenCalledWith({ ref: "main", migratingFromLegacy: true });
+  });
+
+  it("leaves a legacy Praxis installation untouched when migration is declined", async () => {
+    await writeFile(
+      join(tmpDir, ".praxis-manifest.json"),
+      JSON.stringify({ version: "1.0.0", files: {} })
+    );
+
+    p.confirm = vi.fn().mockResolvedValue(false);
+
+    await init();
+
+    expect(update).not.toHaveBeenCalled();
+    expect(p.outro).toHaveBeenCalledWith(
+      expect.stringContaining("Migration skipped")
+    );
   });
 
   it("shows error and exits on fetch failure", async () => {
@@ -128,12 +174,12 @@ describe("init", () => {
     );
 
     const manifest = JSON.parse(
-      await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8")
+      await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8")
     );
     expect(manifest.files["praxis/test.md"]).toBeTruthy();
 
     expect(p.outro).toHaveBeenCalledWith(
-      expect.stringContaining("2 files installed")
+      expect.stringContaining("5 files installed")
     );
   });
 
@@ -163,7 +209,7 @@ describe("init", () => {
     );
 
     const manifest = JSON.parse(
-      await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8")
+      await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8")
     );
     expect(manifest.files["praxis/test.md"].hash).toBe(
       hashContent("local content")
@@ -247,7 +293,7 @@ describe("init", () => {
     );
 
     const manifest = JSON.parse(
-      await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8")
+      await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8")
     );
     expect(
       manifest.files["../../../tmp/praxis-traversal-test"]
@@ -270,7 +316,7 @@ describe("init", () => {
     fetchTemplates.mockResolvedValue(
       new Map([
         ["praxis/conventions.md", "# Core"],
-        ["praxis/skills/px-brainstorm/SKILL.md", "# Core skill"],
+        ["praxis/skills/px-shape/SKILL.md", "# Core skill"],
         ["praxis/skills/agent-browser/SKILL.md", '---\ndescription: "Browser"\n---'],
         ["praxis/skills/figma-to-code/SKILL.md", '---\ndescription: "Figma"\n---'],
         ["praxis/agents/reviewers/security.md", '---\ndescription: "Security"\n---'],
@@ -284,7 +330,7 @@ describe("init", () => {
 
     // Core files always installed
     expect(existsSync(join(tmpDir, "praxis/conventions.md"))).toBe(true);
-    expect(existsSync(join(tmpDir, "praxis/skills/px-brainstorm/SKILL.md"))).toBe(true);
+    expect(existsSync(join(tmpDir, "praxis/skills/px-shape/SKILL.md"))).toBe(true);
 
     // Selected optional components installed
     expect(existsSync(join(tmpDir, "praxis/skills/agent-browser/SKILL.md"))).toBe(true);
@@ -295,7 +341,7 @@ describe("init", () => {
 
     // Manifest includes selectedComponents
     const manifest = JSON.parse(
-      await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8")
+      await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8")
     );
     expect(manifest.selectedComponents).toEqual({
       skills: ["agent-browser"],
@@ -351,7 +397,7 @@ describe("init", () => {
     expect(existsSync(join(tmpDir, ".cursor/conventions.md"))).toBe(true);
 
     const manifest = JSON.parse(
-      await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8")
+      await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8")
     );
     expect(manifest.enabledTools).toEqual(["amp-code", "cursor"]);
     expect(manifest.files["praxis/conventions.md"].destinations).toEqual({
@@ -432,7 +478,7 @@ describe("init", () => {
     fetchTemplates.mockResolvedValue(
       new Map([
         ["praxis/conventions.md", "# Core"],
-        ["praxis/skills/px-brainstorm/SKILL.md", "# Core skill"],
+        ["praxis/skills/px-shape/SKILL.md", "# Core skill"],
       ])
     );
 
@@ -443,7 +489,7 @@ describe("init", () => {
     expect(p.groupMultiselect).not.toHaveBeenCalled();
 
     const manifest = JSON.parse(
-      await readFile(join(tmpDir, ".praxis-manifest.json"), "utf-8")
+      await readFile(join(tmpDir, ".praxis-veritas-manifest.json"), "utf-8")
     );
     expect(manifest.selectedComponents).toEqual({ skills: [], reviewers: [] });
   });
