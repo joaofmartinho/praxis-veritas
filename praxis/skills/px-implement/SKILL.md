@@ -10,7 +10,15 @@ Execute shaped work by writing code. Follow the implementation shape precisely. 
 
 ## How a session works
 
-### 1. Load the implementation shape
+### 1. Load canonical knowledge and the implementation shape
+
+Before doing implementation work:
+
+- read the relevant documents in `.ai-workflow/veritas/`
+- treat `Veritas` as the canonical source of repository knowledge
+- only then load the current shape document from `.ai-workflow/vault/shapes/`
+- do **not** treat the vault as a substitute for canonical understanding
+- do **not** read any other vault artifacts unless the user explicitly asks for vault history or provenance
 
 If `$ARGUMENTS` is provided, treat it as the shaping context:
 
@@ -20,9 +28,15 @@ If `$ARGUMENTS` is provided, treat it as the shaping context:
 
 Otherwise, ask the user what shaped work to implement.
 
-Prefer using the vault shape document whenever one exists. That document is the default implementation brief produced by `px-shape`.
+Prefer using the vault shape document whenever one exists. That document is the default implementation brief produced by `px-shape`, but it complements `Veritas` rather than replacing it.
 
 If a vault shape document exists for this run, use it. Do not ignore it and re-plan from scratch in the implementation step.
+
+If `Veritas` and the shape document seem inconsistent:
+
+- trust `Veritas` as the canonical source
+- use the shape document as the current run handoff
+- stop and resolve the mismatch instead of guessing
 
 Before writing code, make sure you understand:
 
@@ -96,5 +110,5 @@ Commits should tell a story to reviewers (AI or human). It is fine to have multi
 - **Don't over-engineer.** Implement exactly what the shaped scope calls for. No extra features, no "while we're here" improvements.
 - **Test as you go.** Run relevant tests after each step, not just at the end.
 - **Don't skip the review.** Always hand off to px-review after implementation.
-- **Start from Veritas and the current shape document.** Do not dig through the vault unless the canonical knowledge or shape document is insufficient.
+- **Start from Veritas and the current shape document.** Do not read any other vault artifacts unless the user explicitly asks for vault history or provenance.
 - **Batch related edits.** When a step requires multiple changes to the same file, make them all in sequence after a single read, then run tests once. Don't interleave reads and edits on the same file.

@@ -54,10 +54,14 @@ beforeEach(async () => {
       ["praxis/sub/nested.md", "# Nested"],
       [".ai-workflow/.gitignore", "*\n!.gitignore\n!tags\n!vault/\n!vault/**\n!veritas/\n!veritas/**\n"],
       [".ai-workflow/veritas/index.md", "# Veritas"],
+      [".ai-workflow/veritas/template.md", "# Veritas Template"],
       [".ai-workflow/vault/README.md", "# Vault"],
       [".ai-workflow/vault/shapes/README.md", "# Shapes"],
+      [".ai-workflow/vault/shapes/template.md", "# Shape Template"],
       [".ai-workflow/vault/reviews/README.md", "# Reviews"],
+      [".ai-workflow/vault/reviews/template.md", "# Review Template"],
       [".ai-workflow/vault/transmutations/README.md", "# Transmutations"],
+      [".ai-workflow/vault/transmutations/template.md", "# Transmutation Template"],
     ])
   );
 });
@@ -91,17 +95,29 @@ describe("init", () => {
       await readFile(join(tmpDir, ".ai-workflow/veritas/index.md"), "utf-8")
     ).toBe("# Veritas");
     expect(
+      await readFile(join(tmpDir, ".ai-workflow/veritas/template.md"), "utf-8")
+    ).toBe("# Veritas Template");
+    expect(
       await readFile(join(tmpDir, ".ai-workflow/vault/README.md"), "utf-8")
     ).toBe("# Vault");
     expect(
       await readFile(join(tmpDir, ".ai-workflow/vault/shapes/README.md"), "utf-8")
     ).toBe("# Shapes");
     expect(
+      await readFile(join(tmpDir, ".ai-workflow/vault/shapes/template.md"), "utf-8")
+    ).toBe("# Shape Template");
+    expect(
       await readFile(join(tmpDir, ".ai-workflow/vault/reviews/README.md"), "utf-8")
     ).toBe("# Reviews");
     expect(
+      await readFile(join(tmpDir, ".ai-workflow/vault/reviews/template.md"), "utf-8")
+    ).toBe("# Review Template");
+    expect(
       await readFile(join(tmpDir, ".ai-workflow/vault/transmutations/README.md"), "utf-8")
     ).toBe("# Transmutations");
+    expect(
+      await readFile(join(tmpDir, ".ai-workflow/vault/transmutations/template.md"), "utf-8")
+    ).toBe("# Transmutation Template");
 
     expect(await readFile(join(tmpDir, ".ai-workflow/tags"), "utf-8")).toBe("");
 
@@ -119,7 +135,7 @@ describe("init", () => {
     );
 
     expect(p.outro).toHaveBeenCalledWith(
-      expect.stringContaining("8 files installed")
+      expect.stringContaining("12 files installed")
     );
   });
 
@@ -194,7 +210,7 @@ describe("init", () => {
     expect(manifest.files["praxis/test.md"]).toBeTruthy();
 
     expect(p.outro).toHaveBeenCalledWith(
-      expect.stringContaining("8 files installed")
+      expect.stringContaining("12 files installed")
     );
   });
 

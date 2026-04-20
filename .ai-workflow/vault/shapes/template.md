@@ -24,7 +24,7 @@ Brief context that explains why this work exists and any prior decisions that ma
 
 ## Research Summary
 
-Key findings from codebase inspection, prior knowledge in `Veritas`, and external research.
+Key findings from `Veritas`, codebase inspection, and any relevant external research.
 
 ## Proposed Shape
 

@@ -21,7 +21,7 @@ This repository itself is the tooling, not the project being built.
 
 Every design decision in this project must respect the limited context window of AI agents. Tokens spent on infrastructure are tokens not spent on real work. When modifying or adding to this project:
 
-- **Load on demand.** Templates, conventions, and reference files should only enter the context when actually needed. Use progressive disclosure (`reference/template.md`) and `@` mentions.
+- **Load on demand.** Templates, conventions, and reference files should only enter the context when actually needed. Use the artifact templates under `.ai-workflow/` and `@` mentions.
 - **Delegate to sub-agents.** Research and review work runs in parallel sub-agents that return summaries. Never do exploratory work in the main thread.
 - **Don't duplicate.** Shared conventions, output formats, and status definitions live in one place, referenced by many. If you find yourself repeating content across files, extract it.
 - **Keep files lean.** Skill files should contain instructions, not data. Move templates, examples, and reference material to separate files.
@@ -32,7 +32,7 @@ Every design decision in this project must respect the limited context window of
 Every file uses standard markdown with YAML frontmatter. No tool-specific features (like Amp's `.agents/checks/` or Claude Code's hooks) are used in the core workflow. This ensures compatibility across AI coding tools.
 
 ### Progressive disclosure for context efficiency
-File templates live in `reference/template.md` under each skill, loaded only when needed. Shared conventions live in `praxis/conventions.md` and are `@` mentioned by skills. This keeps the initial skill load small.
+Artifact templates live under `.ai-workflow/`, next to the files they govern, and should only be loaded when needed. Shared conventions live in `praxis/conventions.md` and are `@` mentioned by skills. This keeps the initial skill load small.
 
 ### Discovery-based reviewers
 The px-review skill scans `praxis/agents/reviewers/` and runs whatever it finds. No config file lists reviewers. Adding a reviewer = adding a file. Removing one = deleting a file.
@@ -44,7 +44,7 @@ Tracked knowledge artifacts share `.ai-workflow/tags`. Skills read existing tags
 Shaping uses three parallel sub-agents (`codebase-explorer`, `knowledge-reviewer`, `external-researcher`) to gather context without bloating the main thread. Results come back as summaries.
 
 ### Canonical-first knowledge model
-`Veritas` is the authoritative source for future work. `vault/` is useful for handoff and provenance, but agents should not consult it by default when `Veritas` already captures the durable knowledge.
+`Veritas` is the authoritative source for future work. `px-shape` and `px-implement` must both start from `Veritas`. They should only read from `vault/` when the user explicitly asks for vault history or provenance, except for the current shape document that `px-implement` uses as its run handoff.
 
 ### Transmutation over accumulation
 `px-transmute` must update `Veritas` first, update adopted-project agent rules when a learning should become an always-on instruction, and only then write the compact transmutation receipt. No durable knowledge should remain only in temporary notes or in `vault/`.
@@ -61,7 +61,7 @@ Shaping uses three parallel sub-agents (`codebase-explorer`, `knowledge-reviewer
 
 ### Adding a new skill
 1. Create `praxis/skills/skill-name/SKILL.md` with frontmatter (`name`, `description`)
-2. If it produces files, add a `reference/template.md` for progressive disclosure
+2. If it produces files, add or update the template in the relevant `.ai-workflow/` artifact directory
 3. Reference `@../../conventions.md` for shared conventions (relative from `skills/<name>/SKILL.md`)
 4. Update the README with the new skill
 
@@ -79,7 +79,7 @@ Shaping uses three parallel sub-agents (`codebase-explorer`, `knowledge-reviewer
 Edit `praxis/conventions.md`. All skills that `@` mention it will pick up changes automatically. Be especially careful with knowledge authority and retrieval rules.
 
 ### Modifying file templates
-Edit the relevant `reference/template.md`. Changes affect all future documents created by that skill. Existing documents are not affected.
+Edit the relevant template in `.ai-workflow/`. Changes affect all future documents created by the workflow. Existing documents are not affected.
 
 ## Things to watch out for
 

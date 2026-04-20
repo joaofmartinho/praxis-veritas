@@ -33,16 +33,23 @@ Most Veritas docs should read like the current best understanding of the topic, 
 
 Common useful sections:
 
+- `Summary`
 - `Current Model`
+- `Invariants`
+- `Key Flows`
 - `Patterns`
 - `Pitfalls`
 - `Decisions`
 - `Related Docs`
+
+Use the canonical Veritas template referenced by `px-transmute` when creating or heavily restructuring a doc. Keep this file focused on what Veritas is for, not on duplicating the full template structure.
 
 ## Rules
 
 - prefer updating an existing Veritas doc over creating a new one
 - create a new doc only when the knowledge has no good existing home
 - do not store temporary narrative here
+- keep summaries short and sections durable
+- remove stale information instead of appending dated updates
 - do not make future agents depend on `vault/` for durable understanding
 - if a learning should change future agent behavior by default, also codify it in the adopted project's `AGENTS.md` or rule files during `Transmute`

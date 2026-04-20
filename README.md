@@ -30,8 +30,8 @@ px-shape → px-implement → px-review → px-transmute
                         └──── findings ─────┴──→ Veritas
 ```
 
-1. **px-shape** — Clarify the problem, research the codebase and domain, and write a non-canonical shape document such as `.ai-workflow/vault/shapes/20260419-user-onboarding-shape.md`.
-2. **px-implement** — Execute the shaped work step by step using that vault shape document as the implementation brief.
+1. **px-shape** — Clarify the problem, research the codebase and domain from `Veritas` first, then write a non-canonical shape document such as `.ai-workflow/vault/shapes/20260419-user-onboarding-shape.md`.
+2. **px-implement** — Execute the shaped work step by step, always starting from `Veritas` and then using the vault shape document as the implementation brief.
 3. **px-review** — Run configurable reviewer agents in parallel against the changed code. Findings are presented, not auto-fixed. If review produces meaningful findings or risk notes worth preserving, write a compact review record into `.ai-workflow/vault/reviews/`.
 4. **px-transmute** — Convert durable outcomes from shaping, implementation, and review into `Veritas`, update project agent rules when the learning should change future default behavior, then write a compact transmutation receipt into `.ai-workflow/vault/transmutations/`. Temporary artifacts remain non-canonical after transmutation.
 
@@ -237,7 +237,7 @@ Templates live under each skill's `reference/` directory and support progressive
 
 - **Veritas is canonical** — future sessions should rely on `Veritas` first, not on temporary run artifacts or `vault/`.
 - **Transmutation over accumulation** — work should end by updating durable knowledge, not by leaving a pile of dated files behind.
-- **Vault is secondary** — `vault/shapes/`, `vault/reviews/`, and `vault/transmutations/` support implementation, provenance, and auditability, but `Veritas` must stand on its own after transmutation.
+- **Vault access is explicit** — `px-shape` and `px-implement` should read `Veritas` first and only read from `vault/` when the user explicitly asks for vault history or provenance, except for the current shape document used by `px-implement`.
 - **Traceability without dependence** — temporary run artifacts and transmutation receipts can support provenance, but `Veritas` must stand on its own after transmutation.
 - **Configurability** — Reviewers are discoverable by convention. Add or remove them per project without changing any configuration.
 

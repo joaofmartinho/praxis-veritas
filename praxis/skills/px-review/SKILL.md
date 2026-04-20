@@ -53,7 +53,7 @@ If no findings, report a clean review.
 
 ### 5. Write a review record only when it adds value
 
-If the review produced meaningful findings, follow-up decisions, or risk notes worth preserving for provenance, write a **non-canonical review record** into `.ai-workflow/vault/reviews/` using the template in `reference/template.md`.
+If the review produced meaningful findings, follow-up decisions, or risk notes worth preserving for provenance, write a **non-canonical review record** into `.ai-workflow/vault/reviews/` using the template in `.ai-workflow/vault/reviews/template.md`.
 
 Use this filename format:
 - `.ai-workflow/vault/reviews/YYYYMMDD-slug-review.md`

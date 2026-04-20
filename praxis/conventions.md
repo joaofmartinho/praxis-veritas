@@ -55,10 +55,14 @@ Use the `implement/` prefix for implementation branch names: `implement/run-slug
 ## Knowledge authority and retrieval
 
 - Agents must consult `.ai-workflow/veritas/` before looking at temporary run artifacts.
+- `Shape` and `Execute` must both start from `Veritas`.
+- `Shape` must not read from `vault/` unless the user explicitly asks for vault history or provenance.
+- `Execute` must not read from `vault/` unless the user explicitly asks for vault history or provenance, except for the current shape document it is implementing.
 - Temporary run artifacts are allowed during active work, but they are never the final source of truth.
 - After `Transmute` runs, no durable knowledge should remain only in run artifacts.
-- `.ai-workflow/vault/` is non-canonical output, not canonical retrieval input. Agents should not read the vault by default when `Veritas` already contains the durable knowledge.
-- Vault documents may still be searched for provenance, but they must not override `Veritas`.
+- `.ai-workflow/vault/` is non-canonical output, not canonical retrieval input.
+- Vault documents may only be read when the user explicitly asks for vault history or provenance, except for the current shape document used during execution.
+- Vault documents must never override `Veritas`.
 - If a learning changes how agents should behave in future runs, `Transmute` must also update the adopted project's `AGENTS.md` or rule files so the instruction becomes part of the normal workflow.
 
 ## Workflow stages

@@ -96,21 +96,11 @@ Then ask one more question:
 
 If yes, it does not belong only in `Veritas`. It should also update the adopted project's agent instructions.
 
-## Veritas document anatomy
-
-A good `Veritas` doc should usually contain:
-
-- a short frontmatter block
-- a clear title
-- a concise current-state summary
-- stable sections such as:
-  - `Current Model`
-  - `Patterns`
-  - `Pitfalls`
-  - `Decisions`
-  - `Related Docs`
+## Veritas document format
 
 Avoid writing `Veritas` docs as dated diaries. They should read like the current best understanding of the topic.
+
+Use the canonical template in `.ai-workflow/veritas/template.md` when creating or heavily restructuring a `Veritas` doc.
 
 ## When to update project agent rules
 
@@ -166,6 +156,7 @@ Rules:
 - normalize durable knowledge into the right doc type
 - prefer editing an existing doc over creating a new one
 - remove ambiguity if the run clarified something previously fuzzy
+- follow the canonical Veritas template instead of inventing a custom structure
 - keep docs concise and scan-friendly
 
 ### 4. Update project agent rules when behavior should change
@@ -182,7 +173,7 @@ Do not rely on `Veritas` alone for these cases. Make the instruction executable 
 
 ### 5. Write the transmutation receipt
 
-After `Veritas` is updated, write a compact transmutation receipt into `.ai-workflow/vault/transmutations/` using the template in `reference/template.md`.
+After `Veritas` is updated, write a compact transmutation receipt into `.ai-workflow/vault/transmutations/` using the template in `.ai-workflow/vault/transmutations/template.md`.
 
 Use this filename format:
 - `.ai-workflow/vault/transmutations/YYYYMMDD-slug-transmutation.md`

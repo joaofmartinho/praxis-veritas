@@ -17,7 +17,7 @@ Before doing broad exploration:
 1. Read the relevant documents in `.ai-workflow/veritas/`.
 2. Treat `Veritas` as the canonical source of repository knowledge.
 3. Do **not** read `.ai-workflow/vault/` by default.
-4. Only consult `vault/` if the user explicitly asks for provenance, or if `Veritas` is missing important context.
+4. Only consult `vault/` if the user explicitly asks for vault history or provenance.
 
 ## How a session works
 
@@ -64,7 +64,7 @@ If multiple phases are needed, break them into explicit phases. Each phase shoul
 
 ### 5. Write the shape document
 
-Always write a **non-canonical shape document** into `.ai-workflow/vault/shapes/` using the template in `reference/template.md`.
+Always write a **non-canonical shape document** into `.ai-workflow/vault/shapes/` using the template in `.ai-workflow/vault/shapes/template.md`.
 
 This document is the implementation brief for `px-implement`.
 
