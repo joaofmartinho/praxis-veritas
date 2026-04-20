@@ -163,6 +163,9 @@ export async function init({ ref = "main" } = {}) {
   for (const dir of [
     ".ai-workflow/veritas",
     ".ai-workflow/vault",
+    ".ai-workflow/vault/shapes",
+    ".ai-workflow/vault/reviews",
+    ".ai-workflow/vault/transmutations",
     ".ai-workflow/local",
   ]) {
     await mkdir(join(projectRoot, dir), { recursive: true });

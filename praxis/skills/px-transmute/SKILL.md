@@ -1,6 +1,6 @@
 ---
 name: px-transmute
-description: "Convert completed work into durable repository knowledge. Update Veritas first, then write the non-canonical run record."
+description: "Convert completed work into durable repository knowledge. Update Veritas first, then write the non-canonical transmutation receipt."
 argument-hint: "current run, file paths, or a short run identifier"
 ---
 
@@ -8,13 +8,13 @@ argument-hint: "current run, file paths, or a short run identifier"
 
 Transmute completed work into durable repository knowledge.
 
-The purpose of `px-transmute` is to ensure future sessions can rely on `Veritas` instead of rediscovering context through temporary notes, git history, or memory. `px-transmute` always updates `Veritas`, applies recurring operating rules to the adopted project's agent instructions when needed, and only then writes a compact run record into `.ai-workflow/vault/`.
+The purpose of `px-transmute` is to ensure future sessions can rely on `Veritas` instead of rediscovering context through temporary notes, git history, or memory. `px-transmute` always updates `Veritas`, applies recurring operating rules to the adopted project's agent instructions when needed, and only then writes a compact transmutation receipt into `.ai-workflow/vault/transmutations/`.
 
 ## The authority rule
 
 - `Veritas` is canonical.
 - `vault/` is not canonical.
-- No durable knowledge should remain only in a run record after transmutation.
+- No durable knowledge should remain only in a transmutation receipt after transmutation.
 
 ## Veritas structure
 
@@ -88,7 +88,7 @@ Ask:
 - Is this a reusable engineering pattern?
 - Is this a durable decision?
 
-If the answer is no, it may belong only in the run record.
+If the answer is no, it may belong only in the transmutation receipt.
 
 Then ask one more question:
 
@@ -180,18 +180,21 @@ Examples:
 
 Do not rely on `Veritas` alone for these cases. Make the instruction executable by placing it where future agents will read it as part of their normal workflow.
 
-### 5. Write the run record
+### 5. Write the transmutation receipt
 
-After `Veritas` is updated, write a compact run record into `.ai-workflow/vault/` using the template in `reference/template.md`.
+After `Veritas` is updated, write a compact transmutation receipt into `.ai-workflow/vault/transmutations/` using the template in `reference/template.md`.
 
-The run record is for:
+Use this filename format:
+- `.ai-workflow/vault/transmutations/YYYYMMDD-slug-transmutation.md`
+
+The transmutation receipt is for:
 
 - provenance
-- narrative of what changed
-- notable review findings
-- references to updated `Veritas` docs
+- a concise audit trail of what changed in `Veritas`
+- references to updated project rules
+- references to the vault artifacts that were consumed
 
-It is not the main knowledge base.
+It is not the main knowledge base and it must not restate `Veritas` in full.
 
 ### 6. Confirm transmutation
 
@@ -199,7 +202,7 @@ A run is only complete when:
 
 - `Veritas` has been updated
 - project agent rules have been updated when the learning changes default future agent behavior
-- the vault record has been written
+- the transmutation receipt has been written
 - no future-important knowledge remains only in temporary artifacts
 
 ## Behavioral rules
@@ -208,5 +211,5 @@ A run is only complete when:
 - Update project agent rules when a learning should become an always-on behavior.
 - Prefer updating existing docs.
 - Do not create unnecessary doc sprawl.
-- Keep run records compact.
+- Keep transmutation receipts compact.
 - Preserve durable knowledge as current truth, not as dated notes.

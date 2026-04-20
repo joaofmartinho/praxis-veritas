@@ -64,15 +64,16 @@ If multiple phases are needed, break them into explicit phases. Each phase shoul
 
 ### 5. Write the shape document
 
-Always write a **non-canonical shape document** into `.ai-workflow/vault/` using the template in `reference/template.md`.
+Always write a **non-canonical shape document** into `.ai-workflow/vault/shapes/` using the template in `reference/template.md`.
 
 This document is the implementation brief for `px-implement`.
 
 Rules:
 
 - shape documents are required
-- they live in `vault/`, not in `local/`
-- name them `YYYYMMDD-slug-shape.md`
+- they live in `vault/shapes/`, not in `local/`
+- name them `.ai-workflow/vault/shapes/YYYYMMDD-slug-shape.md`
+- for multi-phase work, use `.ai-workflow/vault/shapes/YYYYMMDD-slug-phase-1-shape.md`
 - they are non-canonical support material, not repository truth
 - they should capture the goal, chosen direction, scope, constraints, and acceptance criteria clearly enough for implementation to follow without ambiguity
 - they should include concrete implementation steps, targeted files/modules, and validation expectations whenever that information is known

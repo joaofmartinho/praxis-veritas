@@ -55,6 +55,9 @@ beforeEach(async () => {
       [".ai-workflow/.gitignore", "*\n!.gitignore\n!tags\n!vault/\n!vault/**\n!veritas/\n!veritas/**\n"],
       [".ai-workflow/veritas/index.md", "# Veritas"],
       [".ai-workflow/vault/README.md", "# Vault"],
+      [".ai-workflow/vault/shapes/README.md", "# Shapes"],
+      [".ai-workflow/vault/reviews/README.md", "# Reviews"],
+      [".ai-workflow/vault/transmutations/README.md", "# Transmutations"],
     ])
   );
 });
@@ -77,6 +80,9 @@ describe("init", () => {
 
     expect(existsSync(join(tmpDir, ".ai-workflow/veritas"))).toBe(true);
     expect(existsSync(join(tmpDir, ".ai-workflow/vault"))).toBe(true);
+    expect(existsSync(join(tmpDir, ".ai-workflow/vault/shapes"))).toBe(true);
+    expect(existsSync(join(tmpDir, ".ai-workflow/vault/reviews"))).toBe(true);
+    expect(existsSync(join(tmpDir, ".ai-workflow/vault/transmutations"))).toBe(true);
     expect(existsSync(join(tmpDir, ".ai-workflow/local"))).toBe(true);
     expect(
       await readFile(join(tmpDir, ".ai-workflow/.gitignore"), "utf-8")
@@ -87,6 +93,15 @@ describe("init", () => {
     expect(
       await readFile(join(tmpDir, ".ai-workflow/vault/README.md"), "utf-8")
     ).toBe("# Vault");
+    expect(
+      await readFile(join(tmpDir, ".ai-workflow/vault/shapes/README.md"), "utf-8")
+    ).toBe("# Shapes");
+    expect(
+      await readFile(join(tmpDir, ".ai-workflow/vault/reviews/README.md"), "utf-8")
+    ).toBe("# Reviews");
+    expect(
+      await readFile(join(tmpDir, ".ai-workflow/vault/transmutations/README.md"), "utf-8")
+    ).toBe("# Transmutations");
 
     expect(await readFile(join(tmpDir, ".ai-workflow/tags"), "utf-8")).toBe("");
 
@@ -104,7 +119,7 @@ describe("init", () => {
     );
 
     expect(p.outro).toHaveBeenCalledWith(
-      expect.stringContaining("5 files installed")
+      expect.stringContaining("8 files installed")
     );
   });
 
@@ -179,7 +194,7 @@ describe("init", () => {
     expect(manifest.files["praxis/test.md"]).toBeTruthy();
 
     expect(p.outro).toHaveBeenCalledWith(
-      expect.stringContaining("5 files installed")
+      expect.stringContaining("8 files installed")
     );
   });
 

@@ -14,7 +14,7 @@ Execute shaped work by writing code. Follow the implementation shape precisely. 
 
 If `$ARGUMENTS` is provided, treat it as the shaping context:
 
-- a path to a shape document under `.ai-workflow/vault/`
+- a path to a shape document under `.ai-workflow/vault/shapes/`
 - a short description of the already-shaped work
 - or "current shape" when the shaping context is already clear in the thread
 
@@ -77,6 +77,7 @@ Instead, tell the user to run px-review in a fresh thread (or use `handoff` to s
 After implementation and review are complete:
 
 - keep the vault shape document accurate if implementation materially changed the plan
+- mention any meaningful implementation deviations so `px-review` and `px-transmute` inherit the right context
 - make sure the work can be transmuted cleanly into `Veritas`
 - do not treat vault shape documents as canonical knowledge
 - hand off to `px-transmute` once the work and review are settled

@@ -9,7 +9,10 @@ Praxis Veritas defines a development cycle of `px-shape → px-implement → px-
 The output of this workflow lives in `.ai-workflow/` in whatever project adopts Praxis Veritas:
 
 - `veritas/` for canonical knowledge
-- `vault/` for non-canonical run documents, history, and archived workflow artifacts
+- `vault/` for non-canonical run documents and receipts
+  - `vault/shapes/` for required implementation briefs
+  - `vault/reviews/` for optional review records with meaningful findings
+  - `vault/transmutations/` for required compact receipts of Veritas and rule updates
 - `local/` for gitignored scratch space
 
 This repository itself is the tooling, not the project being built.
@@ -41,10 +44,10 @@ Tracked knowledge artifacts share `.ai-workflow/tags`. Skills read existing tags
 Shaping uses three parallel sub-agents (`codebase-explorer`, `knowledge-reviewer`, `external-researcher`) to gather context without bloating the main thread. Results come back as summaries.
 
 ### Canonical-first knowledge model
-`Veritas` is the authoritative source for future work. `vault/` is useful for provenance, but agents should not consult it by default when `Veritas` already captures the durable knowledge.
+`Veritas` is the authoritative source for future work. `vault/` is useful for handoff and provenance, but agents should not consult it by default when `Veritas` already captures the durable knowledge.
 
 ### Transmutation over accumulation
-`px-transmute` must update `Veritas` first, update adopted-project agent rules when a learning should become an always-on instruction, and only then write the historical run record. No durable knowledge should remain only in temporary notes or in `vault/`.
+`px-transmute` must update `Veritas` first, update adopted-project agent rules when a learning should become an always-on instruction, and only then write the compact transmutation receipt. No durable knowledge should remain only in temporary notes or in `vault/`.
 
 ## Key conventions
 
@@ -84,5 +87,5 @@ Edit the relevant `reference/template.md`. Changes affect all future documents c
 - **Don't put non-agent files in `praxis/agents/`** — some tools load every file in that directory as an agent definition.
 - **The reviewer output format is centralized** in `praxis/reviewer-output-format.md`. If you change it, all reviewers pick up the change. Test with at least one reviewer after modifying.
 - **Tags are append-only in practice.** Skills add new tags but never remove or rename existing ones. If you need to clean up tags, do it manually in `.ai-workflow/tags` and update any documents that use the old tags.
-- **Do not let history become canonical by accident.** If a change makes future work easier, it should probably land in `Veritas`, not only in a run record.
+- **Do not let history become canonical by accident.** If a change makes future work easier, it should probably land in `Veritas`, not only in a vault artifact.
 - **The `@` mention syntax** (e.g., `@../../conventions.md`) triggers automatic context loading. Use paths relative to the skill file's location since skills are installed into tool-specific directories, not `praxis/`. Plain file paths without `@` are just text — the agent would have to manually read them.

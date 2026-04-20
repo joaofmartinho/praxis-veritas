@@ -3,13 +3,16 @@
 ## Directory structure
 
 - `.ai-workflow/veritas/` — canonical repository knowledge
-- `.ai-workflow/vault/` — non-canonical run documents, run records, and archived workflow artifacts
+- `.ai-workflow/vault/` — non-canonical run documents and receipts
+  - `.ai-workflow/vault/shapes/` — required shape documents used by implementation
+  - `.ai-workflow/vault/reviews/` — optional review records with meaningful findings
+  - `.ai-workflow/vault/transmutations/` — required compact receipts of what was promoted into `Veritas`
 - `.ai-workflow/local/` — optional gitignored scratch space for the active local session only
 - `.ai-workflow/tags` — shared tag registry used across Veritas and run artifacts
 
 `Veritas` is the authoritative knowledge layer. Temporary run artifacts are working memory only and must never remain the only place where durable knowledge lives after transmutation.
 
-Run documents and run history belong in `.ai-workflow/vault/`, not in the canonical knowledge layer. Archived workflow artifacts may exist there as well, but they are non-canonical and should be treated as provenance only.
+Run documents and run receipts belong in `.ai-workflow/vault/`, not in the canonical knowledge layer. They are non-canonical and should be treated as handoff and provenance only.
 
 ## File naming
 
@@ -54,17 +57,17 @@ Use the `implement/` prefix for implementation branch names: `implement/run-slug
 - Agents must consult `.ai-workflow/veritas/` before looking at temporary run artifacts.
 - Temporary run artifacts are allowed during active work, but they are never the final source of truth.
 - After `Transmute` runs, no durable knowledge should remain only in run artifacts.
-- `.ai-workflow/vault/` is historical output, not canonical retrieval input. Agents should not read the vault by default when `Veritas` already contains the durable knowledge.
-- Archived workflow documents may still be searched for provenance, but they must not override `Veritas`.
+- `.ai-workflow/vault/` is non-canonical output, not canonical retrieval input. Agents should not read the vault by default when `Veritas` already contains the durable knowledge.
+- Vault documents may still be searched for provenance, but they must not override `Veritas`.
 - If a learning changes how agents should behave in future runs, `Transmute` must also update the adopted project's `AGENTS.md` or rule files so the instruction becomes part of the normal workflow.
 
 ## Workflow stages
 
 - `Shape` — clarify the problem, research the domain, and leave the step with an actionable implementation shape.
-- `Shape` writes a non-canonical shape document into `.ai-workflow/vault/` for implementation to follow.
+- `Shape` writes a non-canonical shape document into `.ai-workflow/vault/shapes/` for implementation to follow.
 - `Execute` — implement the shaped work using the vault shape document as the working brief.
-- `Review` — run reviewers and capture findings.
-- `Transmute` — update `Veritas` first, then write the compact historical run record into `.ai-workflow/vault/`, and only then consider the work cycle complete.
+- `Review` — run reviewers and write a review record into `.ai-workflow/vault/reviews/` only when findings are meaningful enough to preserve.
+- `Transmute` — update `Veritas` first, then write the compact transmutation receipt into `.ai-workflow/vault/transmutations/`, and only then consider the work cycle complete.
 - `Transmute` also updates project agent rules when the run produced a standing instruction that future agents should follow automatically.
 
 ## Status values
@@ -76,4 +79,4 @@ Use the `implement/` prefix for implementation branch names: `implement/run-slug
 
 ### Run history
 - Run lifecycle is tracked in `.ai-workflow/vault/`, not in the canonical knowledge layer.
-- A run is not complete until `Transmute` has updated `Veritas` and written the run record.
+- A run is not complete until `Transmute` has updated `Veritas` and written the transmutation receipt.

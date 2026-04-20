@@ -6,7 +6,7 @@ _From Greek, praxis: the work of putting ideas into practice. From Latin, verita
 
 A portable AI-assisted development workflow. Shape, execute, review, and transmute — each cycle turns work into durable repository knowledge and a compact repository history.
 
-Praxis Veritas is built around knowledge compaction. Temporary workflow artifacts may still help agents think and execute, but they are not the final goal and they are not meant to become the repository's long-term memory. The goal is to end each cycle with `Veritas`: a canonical, curated, topic-oriented knowledge layer that future agents can trust first, plus a compact historical run record stored separately inside the repo.
+Praxis Veritas is built around knowledge compaction. Temporary workflow artifacts may still help agents think and execute, but they are not the final goal and they are not meant to become the repository's long-term memory. The goal is to end each cycle with `Veritas`: a canonical, curated, topic-oriented knowledge layer that future agents can trust first, plus compact non-canonical vault artifacts stored separately inside the repo.
 
 Inspired by [Every's Compound Engineering guide](https://every.to/guides/compound-engineering) and its core principle: **every unit of engineering work should make subsequent units easier, not harder.**
 
@@ -16,7 +16,7 @@ Inspired by [Every's Compound Engineering guide](https://every.to/guides/compoun
 
 **Knowledge compounding.** Workflow artifacts are temporary. `Transmute` merges durable conclusions into `Veritas`, and when a learning should become an always-on instruction, it also updates the adopted project's agent rules so future sessions follow it by default.
 
-**Separate history without canonical drift.** Active non-canonical run documents and completed run records live in a dedicated in-repo vault. That preserves team memory without making the repository's canonical knowledge depend on temporary workflow artifacts.
+**Separate history without canonical drift.** Active non-canonical run documents and completed run receipts live in a dedicated in-repo vault. `vault/shapes/` is the implementation handoff, `vault/reviews/` stores meaningful review outputs when needed, and `vault/transmutations/` stores compact receipts of what was promoted into `Veritas`.
 
 **Context window efficient.** Every design decision respects the limited context window of AI agents. Shared conventions live in one file, referenced by many. The goal: spend tokens on the real work, not on infrastructure.
 
@@ -30,10 +30,10 @@ px-shape → px-implement → px-review → px-transmute
                         └──── findings ─────┴──→ Veritas
 ```
 
-1. **px-shape** — Clarify the problem, research the codebase and domain, and write a non-canonical shape document such as `.ai-workflow/vault/20260419-user-onboarding-shape.md`.
+1. **px-shape** — Clarify the problem, research the codebase and domain, and write a non-canonical shape document such as `.ai-workflow/vault/shapes/20260419-user-onboarding-shape.md`.
 2. **px-implement** — Execute the shaped work step by step using that vault shape document as the implementation brief.
-3. **px-review** — Run configurable reviewer agents in parallel against the changed code. Findings are presented, not auto-fixed.
-4. **px-transmute** — Convert durable outcomes from shaping, implementation, and review into `Veritas`, update project agent rules when the learning should change future default behavior, then write the run history into `.ai-workflow/vault/`. Temporary artifacts become non-canonical after transmutation.
+3. **px-review** — Run configurable reviewer agents in parallel against the changed code. Findings are presented, not auto-fixed. If review produces meaningful findings or risk notes worth preserving, write a compact review record into `.ai-workflow/vault/reviews/`.
+4. **px-transmute** — Convert durable outcomes from shaping, implementation, and review into `Veritas`, update project agent rules when the learning should change future default behavior, then write a compact transmutation receipt into `.ai-workflow/vault/transmutations/`. Temporary artifacts remain non-canonical after transmutation.
 
 ## Components
 
@@ -43,10 +43,10 @@ Core skills implement the full development cycle and are always installed.
 
 | Skill           | Description                                                                          |
 | --------------- | ------------------------------------------------------------------------------------ |
-| `px-shape`      | Clarify the work and write the implementation brief into the vault                   |
+| `px-shape`      | Clarify the work and write the implementation brief into `vault/shapes/`             |
 | `px-implement`  | Execute the shape document step by step, committing meaningful units of work         |
-| `px-review`     | Run configurable reviewer agents in parallel; findings are presented, not auto-fixed |
-| `px-transmute`  | Update `Veritas` and write the mandatory historical run record                       |
+| `px-review`     | Run configurable reviewer agents; findings are presented, and meaningful ones may be written to `vault/reviews/` |
+| `px-transmute`  | Update `Veritas` and write the mandatory compact receipt into `vault/transmutations/` |
 
 Optional skills are project-specific. Select them during `praxis-veritas init` or change your selection anytime with `praxis-veritas components`.
 
@@ -144,7 +144,7 @@ Invoke skills by name through your AI agent:
 
 ```
 /skill px-shape a better way to handle user onboarding
-/skill px-implement .ai-workflow/vault/20260419-user-onboarding-shape.md
+/skill px-implement .ai-workflow/vault/shapes/20260419-user-onboarding-shape.md
 /skill px-review staged
 /skill px-transmute current run
 ```
@@ -170,7 +170,10 @@ praxis/
 .ai-workflow/
 ├── tags                                  # Shared tag registry
 ├── veritas/                              # Canonical knowledge
-├── vault/                                # Non-canonical run documents, records, and archived workflow artifacts
+├── vault/                                # Non-canonical run documents and receipts
+│   ├── shapes/                           # Required shape docs used by px-implement
+│   ├── reviews/                          # Optional review records with meaningful findings
+│   └── transmutations/                   # Required compact receipts of Veritas and rule updates
 ├── local/                                # Optional gitignored scratch space
 ```
 
@@ -234,8 +237,8 @@ Templates live under each skill's `reference/` directory and support progressive
 
 - **Veritas is canonical** — future sessions should rely on `Veritas` first, not on temporary run artifacts or `vault/`.
 - **Transmutation over accumulation** — work should end by updating durable knowledge, not by leaving a pile of dated files behind.
-- **Vault is secondary** — `vault/` keeps shaping documents, provenance, and narrative, but `Veritas` must stand on its own after transmutation.
-- **Traceability without dependence** — temporary run artifacts and historical run records can support provenance, but `Veritas` must stand on its own after transmutation.
+- **Vault is secondary** — `vault/shapes/`, `vault/reviews/`, and `vault/transmutations/` support implementation, provenance, and auditability, but `Veritas` must stand on its own after transmutation.
+- **Traceability without dependence** — temporary run artifacts and transmutation receipts can support provenance, but `Veritas` must stand on its own after transmutation.
 - **Configurability** — Reviewers are discoverable by convention. Add or remove them per project without changing any configuration.
 
 ## License

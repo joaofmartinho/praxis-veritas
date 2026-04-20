@@ -51,7 +51,22 @@ For each finding, include:
 
 If no findings, report a clean review.
 
-### 5. Fix on request
+### 5. Write a review record only when it adds value
+
+If the review produced meaningful findings, follow-up decisions, or risk notes worth preserving for provenance, write a **non-canonical review record** into `.ai-workflow/vault/reviews/` using the template in `reference/template.md`.
+
+Use this filename format:
+- `.ai-workflow/vault/reviews/YYYYMMDD-slug-review.md`
+
+Review records are optional. Do **not** create one for a clean review with no substantive findings.
+
+Keep review records concise:
+- what was reviewed
+- important findings
+- what was fixed immediately versus left as follow-up
+- anything `px-transmute` should keep in mind
+
+### 6. Fix on request
 
 After presenting findings, ask the user which (if any) they want to fix. Only make changes the user explicitly approves.
 
