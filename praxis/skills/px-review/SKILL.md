@@ -19,13 +19,13 @@ If `$ARGUMENTS` is provided, use it as the scope:
 
 If no arguments, ask the user what to review.
 
-### 2. Discover and select reviewers
+### 2. Discover reviewers
 
 Scan `../agents/reviewers/` for all reviewer agent definitions. Each `.md` file in that directory is a reviewer to run.
 
 If the directory is empty or doesn't exist, inform the user and stop.
 
-**Selecting reviewers**: By default, run only the **core reviewers**: `security`, `code-quality`, and `simplicity`. If the user specifies additional reviewers (or `all`), run those too. This keeps the default cost low while still catching the most important issues. Present the list of selected reviewers to the user before launching them.
+By default, run only the **core reviewers**: `security`, `code-quality`, and `simplicity`. If the user specifies additional reviewers (or `all`), run those too.
 
 ### 3. Run reviewers in parallel
 
@@ -60,12 +60,6 @@ Use this filename format:
 
 Review records are optional. Do **not** create one for a clean review with no substantive findings.
 
-Keep review records concise:
-- what was reviewed
-- important findings
-- what was fixed immediately versus left as follow-up
-- anything `px-transmute` should keep in mind
-
 ### 6. Fix on request
 
 After presenting findings, ask the user which (if any) they want to fix. Only make changes the user explicitly approves.
@@ -76,7 +70,6 @@ Each reviewer in `../agents/reviewers/` must follow the output format defined in
 
 ## Behavioral rules
 
-- **Never auto-fix.** Present findings and wait for the user to decide.
-- **Run all reviewers.** Don't skip any discovered reviewer unless the user explicitly asks to.
-- **No false positives over missed issues.** Reviewers should err on the side of flagging things — the user filters.
-- **Respect the plan.** If reviewing implementation of a plan, check the plan's acceptance criteria as part of the review.
+- Never auto-fix.
+- Do not skip requested reviewers.
+- Respect the current shape and acceptance criteria when relevant.
