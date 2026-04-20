@@ -13,7 +13,7 @@ vi.mock("../../src/manifest.js", async (importOriginal) => {
     readManifest: vi.fn(),
   };
 });
-vi.mock("../../src/adapters.js", async (importOriginal) => {
+vi.mock("../../src/adapters/index.js", async (importOriginal) => {
   const actual = await importOriginal();
   return {
     ...actual,
@@ -29,7 +29,7 @@ import {
   writeManifest,
   isLocallyModified,
 } from "../../src/manifest.js";
-import { regenerateToolConfigs } from "../../src/adapters.js";
+import { regenerateToolConfigs } from "../../src/adapters/index.js";
 import { update } from "../../src/commands/update.js";
 
 let tmpDir;

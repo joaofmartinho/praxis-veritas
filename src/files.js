@@ -4,7 +4,7 @@ import { dirname, resolve, sep } from "node:path";
 import * as p from "@clack/prompts";
 import { createPatch } from "diff";
 import { hashContent } from "./manifest.js";
-import { getAdapter } from "./adapters.js";
+import { getAdapter } from "./adapters/index.js";
 
 /**
  * Returns true if resolvedPath is safely within resolvedRoot.

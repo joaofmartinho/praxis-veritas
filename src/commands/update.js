@@ -14,7 +14,7 @@ import {
 } from "../manifest.js";
 import { getComponentForFile, getSelectedComponents } from "../components.js";
 import { installFile, installToDestinations, isSafePath } from "../files.js";
-import { getAdapter, regenerateToolConfigs } from "../adapters.js";
+import { getAdapter, regenerateToolConfigs } from "../adapters/index.js";
 
 export async function update({ ref = "main", migratingFromLegacy = false } = {}) {
   const projectRoot = process.cwd();

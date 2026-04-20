@@ -9,7 +9,7 @@ import {
   getAdapter,
   listAdapters,
   writeMcpConfigFile,
-} from "../adapters.js";
+} from "../adapters/index.js";
 import { installToDestinations, isSafePath } from "../files.js";
 import { fetchTemplates } from "../templates.js";
 

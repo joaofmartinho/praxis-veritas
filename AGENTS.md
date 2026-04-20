@@ -62,7 +62,7 @@ Shaping uses three parallel sub-agents (`codebase-explorer`, `knowledge-reviewer
 ### Adding a new skill
 1. Create `praxis/skills/skill-name/SKILL.md` with frontmatter (`name`, `description`)
 2. If it produces files, add or update the template in the relevant `.ai-workflow/` artifact directory
-3. Reference `@../../conventions.md` for shared conventions (relative from `skills/<name>/SKILL.md`)
+3. Reference `../../conventions.md` for shared conventions (relative from `skills/<name>/SKILL.md`)
 4. Update the README with the new skill
 
 ### Adding a new sub-agent
@@ -76,7 +76,7 @@ Shaping uses three parallel sub-agents (`codebase-explorer`, `knowledge-reviewer
 3. No other changes needed — the px-review skill discovers it automatically
 
 ### Modifying shared conventions
-Edit `praxis/conventions.md`. All skills that `@` mention it will pick up changes automatically. Be especially careful with knowledge authority and retrieval rules.
+Edit `praxis/conventions.md`. All skills that reference it will pick up changes automatically. Be especially careful with knowledge authority and retrieval rules.
 
 ### Modifying file templates
 Edit the relevant template in `.ai-workflow/`. Changes affect all future documents created by the workflow. Existing documents are not affected.
@@ -88,4 +88,4 @@ Edit the relevant template in `.ai-workflow/`. Changes affect all future documen
 - **The reviewer output format is centralized** in `praxis/reviewer-output-format.md`. If you change it, all reviewers pick up the change. Test with at least one reviewer after modifying.
 - **Tags are append-only in practice.** Skills add new tags but never remove or rename existing ones. If you need to clean up tags, do it manually in `.ai-workflow/tags` and update any documents that use the old tags.
 - **Do not let history become canonical by accident.** If a change makes future work easier, it should probably land in `Veritas`, not only in a vault artifact.
-- **The `@` mention syntax** (e.g., `@../../conventions.md`) triggers automatic context loading. Use paths relative to the skill file's location since skills are installed into tool-specific directories, not `praxis/`. Plain file paths without `@` are just text — the agent would have to manually read them.
+- **Use plain relative paths** for cross-references in skills (e.g., `../../conventions.md`). Avoid tool-specific syntax like the `@` mention used by Claude Code — skills are installed across multiple tools and must read consistently in all of them. Relative paths are resolved from the skill's installed location, not from `praxis/`.

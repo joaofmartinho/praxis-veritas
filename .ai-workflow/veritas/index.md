@@ -2,7 +2,7 @@
 
 `Veritas` is the canonical knowledge layer for Praxis Veritas.
 
-Use this directory for durable, topic-oriented knowledge that future runs should trust first. Prefer stable domain or pattern files such as:
+Use this directory for durable, topic-oriented knowledge that future runs should trust first. Prefer stable topic-based files such as:
 
 - `auth.md`
 - `cards/card-details.md`
@@ -14,36 +14,17 @@ Temporary workflow artifacts may help during active work, but after `Transmute` 
 
 ## Structure
 
-Prefer a small number of stable documents organized by knowledge type:
+Prefer a small number of stable documents named after the topic they cover. All Veritas docs are equal — there is no hierarchy of doc types.
 
-- domain docs
-- pattern docs
-- decision docs
-
-Subdirectories are encouraged when a domain has multiple durable subtopics. For example:
+Subdirectories are encouraged when a topic has multiple durable subtopics. For example:
 
 - `cards/card-details.md`
 - `cards/card-renewal.md`
 - `cards/card-lifecycle.md`
 
-Examples:
-
-- `auth.md`
-- `cards/card-details.md`
-- `benefits.md`
-- `event-contract-patterns.md`
-- `domain-boundary-patterns.md`
-- `banking-transfer-confirmation-contract.md`
-
 ## What belongs here
 
-Use `Veritas` for durable repository truth:
-
-- domain understanding
-- codebase patterns that explain how the repository is shaped
-- durable decisions with rationale
-
-Do not use `Veritas` for temporary run narrative.
+Use `Veritas` for durable repository truth: how the system works, the invariants that hold, and the rationale behind decisions that still shape the code. Do not use `Veritas` for temporary run narrative.
 
 ## What belongs in project rules instead
 
@@ -66,24 +47,13 @@ Use this rule:
 
 Most Veritas docs should read like the current best understanding of the topic, not like a dated log.
 
-Common useful sections:
-
-- `Summary`
-- `Current Model`
-- `Invariants`
-- `Key Flows`
-- `Patterns`
-- `Pitfalls`
-- `Decisions`
-- `Related Docs`
-
-Use the canonical Veritas template referenced by `px-transmute` when creating or heavily restructuring a doc. Keep this file focused on what Veritas is for, not on duplicating the full template structure.
+Use the canonical template at `.ai-workflow/veritas/template.md` when creating or heavily restructuring a doc. The template defines the frontmatter and the default section set; add, remove, or reorder sections to fit the topic.
 
 ## Rules
 
 - prefer updating an existing Veritas doc over creating a new one
 - create a new doc only when the knowledge has no good existing home
-- use subdirectories when one domain has multiple durable subtopics
+- use subdirectories when one topic has multiple durable subtopics
 - do not store temporary narrative here
 - do not use Veritas for always-on agent operating instructions like testing, translation, or migration rules; those belong in project rules
 - do not duplicate dedicated project rule files inside Veritas

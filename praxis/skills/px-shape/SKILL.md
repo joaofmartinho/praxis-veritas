@@ -36,9 +36,9 @@ If multiple phases are needed, break them into explicit phases that are independ
 
 ### 5. Write the shape document
 
-Always write a **non-canonical shape document** into `.ai-workflow/vault/shapes/` using the template in `.ai-workflow/vault/shapes/template.md`.
+Always write a **non-canonical shape document** using the template in `.ai-workflow/vault/shapes/template.md`. The template declares its own filename and the fields to fill in.
 
-This document is the implementation brief for `px-implement`. Name it `.ai-workflow/vault/shapes/YYYYMMDD-slug-shape.md`. For multi-phase work, use `.ai-workflow/vault/shapes/YYYYMMDD-slug-phase-1-shape.md`.
+This document is the implementation brief for `px-implement`.
 
 ### 6. Hand off cleanly
 

@@ -16,12 +16,10 @@ Run documents and run receipts belong in `.ai-workflow/vault/`, not in the canon
 
 ## File naming
 
-- Veritas domain and pattern docs prefer stable topic-based names (for example `auth.md`, `cards.md`, `inter-domain-events.md`).
-- Temporary run artifacts use dated slugs: `YYYYMMDD-slug.md` (for example `20260222-offline-first-sync.md`).
+Each template declares its own filename pattern at the top of the template file. Two general rules apply:
 
-Shape documents use dated run slugs ending in `-shape.md`: `YYYYMMDD-slug-shape.md`.
-
-If a run needs multiple phased records, append the phase before the suffix: `YYYYMMDD-slug-phase-1-shape.md`.
+- Veritas documents use stable topic-based names (for example `auth.md`, `cards.md`).
+- Vault artifacts use dated run slugs (for example `20260222-offline-first-sync-shape.md`). For multi-phase work, append the phase before the suffix: `YYYYMMDD-slug-phase-1-shape.md`.
 
 ## Tags
 

@@ -21,6 +21,8 @@ export async function fetchTemplates({ ref = "main" } = {}) {
     throw new Error(`GitHub API returned status ${res.status}.${hint}`);
   }
 
+  // The header is advisory — if missing or malformed, Number() returns NaN and
+  // this check no-ops. The post-download size check below is the real guard.
   const contentLength = Number(res.headers.get("content-length"));
   if (contentLength > MAX_DOWNLOAD_SIZE) {
     throw new Error(

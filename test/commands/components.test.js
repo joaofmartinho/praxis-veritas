@@ -22,7 +22,7 @@ vi.mock("../../src/files.js", async (importOriginal) => {
     isSafePath: actual.isSafePath,
   };
 });
-vi.mock("../../src/adapters.js", async (importOriginal) => {
+vi.mock("../../src/adapters/index.js", async (importOriginal) => {
   const actual = await importOriginal();
   return {
     ...actual,
@@ -34,7 +34,7 @@ import * as p from "@clack/prompts";
 import { fetchTemplates } from "../../src/templates.js";
 import { readManifest, hashContent, writeManifest } from "../../src/manifest.js";
 import { installFile } from "../../src/files.js";
-import { regenerateToolConfigs } from "../../src/adapters.js";
+import { regenerateToolConfigs } from "../../src/adapters/index.js";
 import { components } from "../../src/commands/components.js";
 
 let tmpDir;

@@ -2,23 +2,14 @@ import { transformEnvVars } from "./shared.js";
 
 /**
  * Maps a source file (praxis/...) to its destination under .opencode/.
- * Skills → .opencode/skills/, agents → .opencode/agents/, shared files → .opencode/
  */
 export function getDestinationPath(sourceFile) {
   if (!sourceFile.startsWith("praxis/")) return null;
-  const relative = sourceFile.slice("praxis/".length);
-
-  if (relative.startsWith("skills/")) {
-    return ".opencode/" + relative;
-  }
-  if (relative.startsWith("agents/")) {
-    return ".opencode/" + relative;
-  }
-  return ".opencode/" + relative;
+  return ".opencode/" + sourceFile.slice("praxis/".length);
 }
 
-export function getToolName() {
-  return "opencode";
+export function getSkillsDir() {
+  return ".opencode/skills/";
 }
 
 export function getDisplayName() {
@@ -55,13 +46,4 @@ export function generateMcpConfig(mcpConfig) {
 
 export function getMcpConfigPath() {
   return "opencode.json";
-}
-
-export function getManagedFiles(sourceFiles) {
-  const managed = [];
-  for (const sourceFile of sourceFiles) {
-    const dest = getDestinationPath(sourceFile);
-    if (dest) managed.push(dest);
-  }
-  return managed;
 }

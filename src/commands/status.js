@@ -3,7 +3,7 @@ import { join } from "node:path";
 import * as p from "@clack/prompts";
 import pc from "picocolors";
 import { hashFile, readManifest } from "../manifest.js";
-import { getAdapter } from "../adapters.js";
+import { getAdapter } from "../adapters/index.js";
 
 export async function status() {
   const projectRoot = process.cwd();

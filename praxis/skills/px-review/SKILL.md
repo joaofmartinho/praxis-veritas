@@ -21,11 +21,11 @@ If no arguments, ask the user what to review.
 
 ### 2. Discover reviewers
 
-Scan `../agents/reviewers/` for all reviewer agent definitions. Each `.md` file in that directory is a reviewer to run.
+Scan `../../agents/reviewers/` for all reviewer agent definitions. Each `.md` file in that directory is a reviewer to run.
 
 If the directory is empty or doesn't exist, inform the user and stop.
 
-By default, run only the **core reviewers**: `security`, `code-quality`, and `simplicity`. If the user specifies additional reviewers (or `all`), run those too.
+By default, run every installed reviewer. Users opt in at install time, so running all of them matches their intent. If the user passes a reviewer-name filter in `$ARGUMENTS`, run only the named reviewers.
 
 ### 3. Run reviewers in parallel
 
@@ -53,10 +53,7 @@ If no findings, report a clean review.
 
 ### 5. Write a review record only when it adds value
 
-If the review produced meaningful findings, follow-up decisions, or risk notes worth preserving for provenance, write a **non-canonical review record** into `.ai-workflow/vault/reviews/` using the template in `.ai-workflow/vault/reviews/template.md`.
-
-Use this filename format:
-- `.ai-workflow/vault/reviews/YYYYMMDD-slug-review.md`
+If the review produced meaningful findings, follow-up decisions, or risk notes worth preserving for provenance, write a **non-canonical review record** using the template in `.ai-workflow/vault/reviews/template.md`. The template declares its own filename and the fields to fill in.
 
 Review records are optional. Do **not** create one for a clean review with no substantive findings.
 
@@ -66,7 +63,7 @@ After presenting findings, ask the user which (if any) they want to fix. Only ma
 
 ## Reviewer agent conventions
 
-Each reviewer in `../agents/reviewers/` must follow the output format defined in `../reviewer-output-format.md`.
+Each reviewer in `../../agents/reviewers/` must follow the output format defined in `../../reviewer-output-format.md`.
 
 ## Behavioral rules
 

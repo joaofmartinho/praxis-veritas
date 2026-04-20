@@ -1,4 +1,8 @@
-```markdown
+<!--
+Filename: .ai-workflow/vault/transmutations/YYYYMMDD-slug-transmutation.md
+Tags: draw from .ai-workflow/tags (see conventions.md).
+Copy everything below this comment into the new file.
+-->
 ---
 title: Transmutation Title
 date: YYYY-MM-DD
@@ -31,4 +35,3 @@ canonical: false
 ## Notes
 
 - Short bullets about why knowledge was merged versus split, or any noteworthy curation decisions
-```

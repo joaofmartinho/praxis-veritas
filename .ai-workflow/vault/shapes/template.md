@@ -1,4 +1,9 @@
-```markdown
+<!--
+Filename: .ai-workflow/vault/shapes/YYYYMMDD-slug-shape.md
+Multi-phase work: .ai-workflow/vault/shapes/YYYYMMDD-slug-phase-1-shape.md
+Tags: draw from .ai-workflow/tags (see conventions.md).
+Copy everything below this comment into the new file.
+-->
 ---
 title: Shape Title
 date: YYYY-MM-DD
@@ -66,4 +71,3 @@ The chosen direction in 2-4 sentences.
 - Recommended implementation starting point
 - Suggested validation steps
 - Anything `px-review` should pay special attention to
-```

@@ -2,21 +2,14 @@ import { transformEnvVars } from "./shared.js";
 
 /**
  * Maps a source file (praxis/...) to its destination under .cursor/.
- * Skills → .cursor/skills/, agents → .cursor/, shared files → .cursor/
  */
 export function getDestinationPath(sourceFile) {
   if (!sourceFile.startsWith("praxis/")) return null;
-  const relative = sourceFile.slice("praxis/".length);
-
-  if (relative.startsWith("skills/")) {
-    return ".cursor/" + relative;
-  }
-  // Agents and shared files go under .cursor/
-  return ".cursor/" + relative;
+  return ".cursor/" + sourceFile.slice("praxis/".length);
 }
 
-export function getToolName() {
-  return "cursor";
+export function getSkillsDir() {
+  return ".cursor/skills/";
 }
 
 export function getDisplayName() {
@@ -40,13 +33,4 @@ export function generateMcpConfig(mcpConfig) {
 
 export function getMcpConfigPath() {
   return ".cursor/mcp.json";
-}
-
-export function getManagedFiles(sourceFiles) {
-  const managed = [];
-  for (const sourceFile of sourceFiles) {
-    const dest = getDestinationPath(sourceFile);
-    if (dest) managed.push(dest);
-  }
-  return managed;
 }

@@ -13,7 +13,7 @@ import {
   decodeComponentValue,
 } from "../components.js";
 import { installFile, installToDestinations, isSafePath } from "../files.js";
-import { listAdapters, regenerateToolConfigs } from "../adapters.js";
+import { listAdapters, regenerateToolConfigs } from "../adapters/index.js";
 
 export async function init({ ref = "main" } = {}) {
   const projectRoot = process.cwd();

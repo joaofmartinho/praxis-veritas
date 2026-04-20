@@ -41,26 +41,15 @@ export async function collectMcpConfig(projectRoot, manifest) {
 
   const merged = Object.create(null);
 
-  // Determine the skills directory based on enabled tools.
-  // If amp-code is enabled, skills are in .agents/skills/; otherwise check
-  // the first enabled tool's path. We iterate enabled adapters to find where
-  // the skill mcp.json actually lives on disk.
-  const enabledTools = manifest.enabledTools || [];
+  // Per-skill mcp.json lives under each enabled tool's skills dir on disk;
+  // also fall back to the source praxis/ layout for local development.
   const searchPrefixes = [];
-  for (const toolName of enabledTools) {
+  for (const toolName of manifest.enabledTools || []) {
     const adapter = adapters[toolName];
+    /* v8 ignore next */
     if (!adapter) continue;
-    const testPath = adapter.getDestinationPath("praxis/skills/test/mcp.json");
-    /* v8 ignore next 5 -- all registered adapters return a valid skills path */
-    if (testPath) {
-      const idx = testPath.indexOf("skills/");
-      if (idx >= 0) {
-        searchPrefixes.push(testPath.slice(0, idx + "skills/".length));
-      }
-    }
+    searchPrefixes.push(adapter.getSkillsDir());
   }
-
-  // Always also check the source praxis/ directory (for local dev)
   searchPrefixes.push("praxis/skills/");
 
   for (const skillName of selected.skills) {
@@ -71,7 +60,7 @@ export async function collectMcpConfig(projectRoot, manifest) {
     for (const prefix of searchPrefixes) {
       const mcpPath = resolve(projectRoot, prefix, skillName, "mcp.json");
       const expectedPrefix = resolve(projectRoot, prefix) + sep;
-      /* v8 ignore next -- skillName is pre-filtered for ".." and "/" on line 68 */
+      /* v8 ignore next -- skillName is pre-filtered for ".." and "/" above */
       if (!mcpPath.startsWith(expectedPrefix)) continue;
 
       try {

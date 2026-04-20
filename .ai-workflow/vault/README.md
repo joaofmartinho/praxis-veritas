@@ -8,4 +8,4 @@ This directory stores non-canonical run documents and receipts.
 - `reviews/` stores optional review records when findings are worth preserving
 - `transmutations/` stores required compact receipts of what was promoted into `Veritas` and project rules
 
-Future agents should read `Veritas` first and only inspect `vault/` when they need active handoff or historical reasoning that is not already captured canonically.
+Future agents should read `Veritas` first and only inspect `vault/` when asked by the user.

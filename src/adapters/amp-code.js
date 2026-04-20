@@ -1,7 +1,3 @@
-import { resolve, sep } from "node:path";
-import { readFile } from "node:fs/promises";
-
-const TOOL_NAME = "amp-code";
 const DISPLAY_NAME = "Amp Code";
 
 /**
@@ -13,8 +9,8 @@ export function getDestinationPath(sourceFile) {
   return ".agents/" + sourceFile.slice("praxis/".length);
 }
 
-export function getToolName() {
-  return TOOL_NAME;
+export function getSkillsDir() {
+  return ".agents/skills/";
 }
 
 export function getDisplayName() {
@@ -30,17 +26,4 @@ export function generateMcpConfig() {
 
 export function getMcpConfigPath() {
   return null;
-}
-
-/**
- * Returns the list of destination paths this adapter manages for the given
- * source files.
- */
-export function getManagedFiles(sourceFiles) {
-  const managed = [];
-  for (const sourceFile of sourceFiles) {
-    const dest = getDestinationPath(sourceFile);
-    if (dest) managed.push(dest);
-  }
-  return managed;
 }

@@ -14,7 +14,7 @@ import {
   decodeComponentValue,
 } from "../components.js";
 import { installFile, installToDestinations, isSafePath } from "../files.js";
-import { regenerateToolConfigs } from "../adapters.js";
+import { regenerateToolConfigs } from "../adapters/index.js";
 
 export async function components({ ref = "main" } = {}) {
   const projectRoot = process.cwd();

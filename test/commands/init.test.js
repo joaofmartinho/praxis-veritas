@@ -7,7 +7,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 vi.mock("@clack/prompts");
 vi.mock("../../src/templates.js");
 vi.mock("../../src/commands/update.js", () => ({ update: vi.fn() }));
-vi.mock("../../src/adapters.js", async (importOriginal) => {
+vi.mock("../../src/adapters/index.js", async (importOriginal) => {
   const actual = await importOriginal();
   return {
     ...actual,
@@ -19,7 +19,7 @@ import * as p from "@clack/prompts";
 import { fetchTemplates } from "../../src/templates.js";
 import { update } from "../../src/commands/update.js";
 import { hashContent } from "../../src/manifest.js";
-import { regenerateToolConfigs } from "../../src/adapters.js";
+import { regenerateToolConfigs } from "../../src/adapters/index.js";
 import { init } from "../../src/commands/init.js";
 
 let tmpDir;

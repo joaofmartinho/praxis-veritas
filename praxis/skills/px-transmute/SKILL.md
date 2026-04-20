@@ -52,10 +52,7 @@ If the run produced a reusable operating rule for future agents, update the adop
 
 ### 5. Write the transmutation receipt
 
-After `Veritas` is updated, write a compact transmutation receipt into `.ai-workflow/vault/transmutations/` using the template in `.ai-workflow/vault/transmutations/template.md`.
-
-Use this filename format:
-- `.ai-workflow/vault/transmutations/YYYYMMDD-slug-transmutation.md`
+After `Veritas` is updated, write a compact transmutation receipt using the template in `.ai-workflow/vault/transmutations/template.md`. The template declares its own filename and the fields to fill in.
 
 The transmutation receipt is for:
 

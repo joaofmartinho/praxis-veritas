@@ -1,4 +1,8 @@
-```markdown
+<!--
+Filename: .ai-workflow/vault/reviews/YYYYMMDD-slug-review.md
+Tags: draw from .ai-workflow/tags (see conventions.md).
+Copy everything below this comment into the new file.
+-->
 ---
 title: Review Title
 date: YYYY-MM-DD
@@ -28,4 +32,3 @@ reviewed_artifacts:
 
 - Anything still open
 - Anything `px-transmute` should preserve or turn into rules
-```
